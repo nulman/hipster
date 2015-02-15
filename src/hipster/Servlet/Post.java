@@ -76,7 +76,7 @@ public class Post extends HttpServlet {
 		    	//if it is
 				//query the original posts' republish amount and republish_to
 		    	stmt = conn.createStatement();
-				results = stmt.executeQuery("select REPUBLISH_OF, MID, TEXT from POSTS where "
+				results = stmt.executeQuery("select * from POSTS where "
 						+ "MID='"+republish_id+"'");
 				if(results.next()){
 					uid=results.getInt("USER_ID");
