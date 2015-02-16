@@ -1,0 +1,23 @@
+@import 'bootstrap.less';
+
+body {
+    background-image: url('../../resources/images/pat1.png');
+}
+.row {
+    background-color:rgba(238, 226, 219, 0.4);
+}
+
+.col-sm-4 {
+    padding: 5%;
+    height:100%;
+}
+
+.row-same-height {
+    display: table;
+    width: 100%;
+}
+
+.col-xs-height {
+    display: table-cell;
+    float: none !important;
+}
