@@ -27,7 +27,11 @@ public class Tools {
 	private static Context context = null;
 	private static BasicDataSource ds = null;
 	private static Connection conn = null;
+	private static double log_base = Math.log(2.0);
 	
+	public static double Log2(double x){
+		return(Math.log(x)/log_base);
+	}
 	public static Connection getConnection(){
 		try {
 			context = new InitialContext();

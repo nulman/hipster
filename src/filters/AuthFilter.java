@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet Filter implementation class AuthFilter
  */
-@WebFilter("/AuthFilter")
+//@WebFilter("/AuthFilter")
 public class AuthFilter implements Filter {
 
     /**
@@ -40,7 +40,7 @@ public class AuthFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request;
+		/*HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
          
         String uri = req.getRequestURI();
@@ -67,7 +67,7 @@ public class AuthFilter implements Filter {
 	    }else{
 	    	res.sendRedirect("/Hipster/login.html");
 	    	return;
-	    }
+	    }*/chain.doFilter(request, response);
 	}
 
 	/**

@@ -32,7 +32,7 @@
     <Resource name="jdbc/hipster_DB" auth="Container"
 	type="javax.sql.DataSource"
 	driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
-	url="jdbc:derby:C:\Users\Mr.Wootz\workspace\Hipster\DB"
+	url="jdbc:derby:C:\cygwin\home\Mr.Wootz\Hipster\DB"
 	username="user" password="password" maxActive="20"
 	maxIdle="10" maxWait="-1" />
 

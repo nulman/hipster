@@ -55,6 +55,7 @@ public class TestServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String get[] = request.getRequestURI().split("/");
+		int uid =0;
 		//response.setContentType("text/html");
 	    //PrintWriter out = response.getWriter();
 	    //out.println("you are trying to access <font color=red>" + get[get.length-1] + "</font>\n");
@@ -108,7 +109,15 @@ public class TestServlet extends HttpServlet {
 	        }
 	    }
 	    //gson: results set to json method
+	    //Tools.ResSetToJSONRes(response, results);
+	    //System.err.println("about to sql\n");
+	    /*stmt.execute("INSERT INTO POSTS(owner, text, popularity) VALUES("+7+", "
+				+"'this is another test  <a href=http://youtu.be/dQw4w9WgXcQ>@hrefs</a>  i dont know what an href looks like'"
+				+", "+42+")");*/
+	    //System.err.println("post sql\n");
+	    results = stmt.executeQuery("select * from POSTS");
 	    Tools.ResSetToJSONRes(response, results);
+	    
 	    //out.close();
 	    /*response.setContentType("application/json; charset=UTF-8");
 	    response.setCharacterEncoding("UTF-8");
