@@ -14,8 +14,11 @@
   
 	<script>
 	$(document).ready(function(){
-	    $("col-sm-12").click(function(){
-	        $(this).hide();
+		$("#OR").mouseenter(function(){
+			$("#text").css("font-weight", "bold");
+	    });
+		$("#OR").mouseleave(function(){
+			$("#text").css("font-weight", "normal");
 	    });
 	});
 	</script>
@@ -26,76 +29,55 @@
 
 <div class="container">
 		<div class="row">
-		<div class="col-sm-12" align="center">
+		<div class="jumbotron" align="center" id="logo">
 		   <img src="resources/images/hipsterlogo2.png" alt="Hipster Logo" style="width:60%;">
-		   <h1>A social network so exclusive it's like you're talking to yourself</h1>     
 		</div>
 		</div>
-		<div class="row">
-		<div class="row-same-height">
-		
-			<div class="col-sm-4 col-xs-height" align="center">
-			<h2>Login</h2>	
-				<form action="LoginServlet" method="post" class="form-horizontal" >
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">Username:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="username" data-ng-disabled="!edit" placeholder="Username">
-			    	</div>
-			  	</div>
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">Password:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="password" data-ng-disabled="!edit" placeholder="Password">
-			    	</div>
-			  	</div>  
+		<div class="row">	
+			<div class="col-sm-1"></div>
+			<div class="col-sm-4 ">
+			<h2 align="center">Login</h2>	
+				<form action="LoginServlet" method="post" class="form-horizontal" style="align:left" >
+			  		Username:<br>
+					<input type="text" name="username" value="username">
+					<br>
+					Password:<br>
+					<input type="password" name="password" value="password">
+					<br><br>
 		
 				<button class="btn btn" data-ng-disabled="error || incomplete">Submit</button>
 				</form>
 			</div>	
 			
-			<div class="col-sm-2 col-xs-height" align="center" style="font-size:450%; vertical-align:middle;"><p><b>OR</b></p></div>
+			<div class="col-sm-2" id= "OR" align="center" style="font-size:450%; vertical-align:middle;"><p><b>OR</b></p></div>
 			
-			<div class="col-sm-4 col-xs-height" align="center">
-			<h2>Sign Up</h2>	
-				<form action="SignupServlet" method="post" class="form-horizontal" >
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">Username:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="username" data-ng-disabled="!edit" placeholder="Username">
-			    	</div>
-			  	</div>
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">Password:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="password" data-ng-disabled="!edit" placeholder="Password">
-			    	</div>
-			  	</div>
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">Nickname:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="nickname" data-ng-disabled="!edit" placeholder="Nickname">
-			    	</div>
-			  	</div> 
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">ImageURL:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="imgurl" data-ng-disabled="!edit" placeholder="imgURL">
-			    	</div>
-			  	</div>
-			  	<div class="form-group">
-			    	<label class="col-sm-2 control-label">Description:</label>
-			    	<div class="col-sm-10">
-			    		<input type="text" data-ng-model="description" data-ng-disabled="!edit" placeholder="Description">
-			    	</div>
-			  	</div>  
+			<div class="col-sm-4">
+			<h2 align="center">Sign Up</h2>	
+				<form action="SignupServlet" method="post" class="form-horizontal" style="align:left" id="signup">
+			  		Username:<br>
+					<input type="text" name="username" value="username">
+					<br>
+					Password:<br>
+					<input type="password" name="password" value="password">
+					<br>
+			  		Nickname:<br>
+					<input type="text" name="nickname" value="nickname">
+					<br>
+					Image URL:<br>
+					<input type="text" name="imgurl" value="imgurl">
+					<br>
+					Short Description:<br>
+					<textarea class="form-control" rows="5" name="description" form="signup" maxlength="140"></textarea>
+					<br><br>
 		
 				<button class="btn btn" data-ng-disabled="error || incomplete">Submit</button>
 				</form>
 			</div>
-		</div>
+			<div class="col-sm-1"></div>
+			
 		</div>
 </div>
+
 
 </body>
 </html>
