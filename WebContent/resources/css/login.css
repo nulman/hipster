@@ -1,23 +1,33 @@
 @import 'bootstrap.less';
+@font-face {
+    font-family: Hipster;
+    src: url('../../resources/fonts/AGENCYB.TTF');
+}
 
 body {
     background-image: url('../../resources/images/pat1.png');
 }
 .row {
     background-color:rgba(238, 226, 219, 0.4);
+    border-right-style: solid;
+    border-left-style: solid;
+    border-width: thick;
+    border-color: #333333;
+
 }
 
 .col-sm-4 {
-    padding: 5%;
-    height:100%;
+    background-color:rgba(238, 226, 219, 0.4);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 2%;
 }
 
-.row-same-height {
-    display: table;
-    width: 100%;
+.jumbotron{
+	background: transparent;
+	
 }
 
-.col-xs-height {
-    display: table-cell;
-    float: none !important;
+h1{
+	font-family: Hipster;	
 }
