@@ -61,8 +61,8 @@ public class LoginServlet extends HttpServlet {
 			//connect to derby
 			Connection conn = Tools.getConnection();
 			stmt = conn.createStatement();
-			
-					System.err.print("loginservlet. request. name="+name+" pass="+pass+" parameters=");
+					//debug code that prints all the
+					/*System.err.print("loginservlet. request. name="+name+" pass="+pass+" parameters=");
 					Enumeration<String> en=request.getParameterNames();
 					 
 					while(en.hasMoreElements())
@@ -71,7 +71,7 @@ public class LoginServlet extends HttpServlet {
 					String param=(String)objOri;
 					String value=request.getParameter(param);
 					System.err.println(param+" "+value);
-					}
+					}*/
 
 			results = stmt.executeQuery("select USER_ID, PIC from USERS where "
 					+ "USERNAME='"+name+"'AND PASSWORD='"+pass+"'");
@@ -81,21 +81,21 @@ public class LoginServlet extends HttpServlet {
 				//close DB connection
 				conn.close();
 	//this doesnt get sent...
-	out.println("<font color=red>username="+name+" pass="+pass+" id="+uid+" </font>\n");
-	System.err.println("<font color=red>username="+name+" pass="+pass+" id="+uid+" </font>\n");
+	out.println("<font color=red size=20>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
+	System.err.println("<font color=red>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
 				Cookie cookie = new Cookie("hipsterUser", name);
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
 	            response.addCookie(cookie);
 	            System.err.println("///in loging servlet, added cookie: "+ cookie.getName());
-	            /*cookie = new Cookie("hipsterUid", String.valueOf(uid));
+	            cookie = new Cookie("hipsterUid", String.valueOf(uid));
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
 	            response.addCookie(cookie);
 	            cookie = new Cookie("hipsterPic", pic);
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
-	            response.addCookie(cookie)*/;
+	            response.addCookie(cookie);
 	            //redirect to personal page
 	            //response.sendRedirect("/Hipster/LoginSuccess.jsp");
 	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/LoginSuccess.jsp");

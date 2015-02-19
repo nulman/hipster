@@ -1,6 +1,15 @@
 package hipster.Servlet;
 
+import internals.Tools;
+
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class SignUp
  */
-@WebServlet("/SignUp")
+@WebServlet("/SignupServlet")
 public class SignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,6 +42,56 @@ public class SignUp extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String username = null;
+		String nickname = null;
+		String password = null;
+		String pic = null;
+		String description = null;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet results = null;
+		RequestDispatcher rd = null;
+		boolean stmtSuccess = false;
+		
+		
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		
+		username=request.getParameter("username");
+		nickname=request.getParameter("nickname");
+		password=request.getParameter("password");
+		pic=request.getParameter("imgurl");
+		description=request.getParameter("description");
+		
+		try{
+			conn = Tools.getConnection();
+			stmt=conn.createStatement();
+			results=stmt.executeQuery("select user_id from users where username='"+username+"' fetch first row only");
+			//username already exists
+			if(results.next()){
+				out.println("<div><font size=20>the name "+username+" is already taken</font></div>");
+				
+				
+			}else{
+				//this is indeed a new user
+				System.err.println("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
+						+password+"', '"+nickname+"', '"+pic+"', '"+description+"')");
+				stmtSuccess = stmt.execute("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
+						+password+"', '"+nickname+"', '"+pic+"', '"+description+"')");
+				if(stmtSuccess){
+					out.println("<div><font size=20>registration successful! please log in to continue</font></div>");
+				}else{
+					out.println("<div><font size=20>a database error has occured, please try again </font></div>");
+				}
+			}
+			conn.close();
+			rd = getServletContext().getRequestDispatcher("/login.html?dude=\"what\"");
+            rd.include(request, response);
+            //response.sendRedirect("/Hipster/login.html?msg=\"something something\"");
+            out.close();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 		//extract username from request
 		//establish a db connection
 		//query if the username already exists

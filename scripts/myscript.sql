@@ -18,4 +18,4 @@ alter table POSTS add text varchar(140)
 alter table POSTS drop column text
 drop table posts
 alter table users add popularity double default 1.0
-
+alter table users add column description varchar(140) default null

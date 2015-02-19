@@ -59,10 +59,10 @@ public class AuthFilter implements Filter {
 	        }
 	    }
 	    System.err.println("------+no cookie: "+uri.toString());
-	    if(uri.endsWith("login.html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet") 
-	    		|| uri.endsWith("angular.min.js") || uri.endsWith(".css") || uri.contains("resources") 
-	    		|| uri.endsWith("app.js")){
-	    	System.err.println("------++:static page or login sevrlet: "+uri.toString());
+	    if(uri.contains(".html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet") 
+	    		|| uri.endsWith("angular.min.js") || uri.endsWith(".css") || uri.contains("/resources/") 
+	    		|| uri.endsWith("app.js") || uri.endsWith("SignupServlet")){
+	    	System.err.println("------++:static page or login/signup sevrlet: "+uri.toString());
 	    	chain.doFilter(request, response);
 	    	return;
 	    }else{
