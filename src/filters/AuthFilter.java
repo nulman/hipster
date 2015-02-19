@@ -40,9 +40,8 @@ public class AuthFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		/*HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-         
         String uri = req.getRequestURI();
         System.err.println("*******in filter: "+uri.toString());
          
@@ -60,14 +59,16 @@ public class AuthFilter implements Filter {
 	        }
 	    }
 	    System.err.println("------+no cookie: "+uri.toString());
-	    if(uri.endsWith("login.html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet")){
+	    if(uri.endsWith("login.html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet") 
+	    		|| uri.endsWith("angular.min.js") || uri.endsWith(".css") || uri.contains("resources") 
+	    		|| uri.endsWith("app.js")){
 	    	System.err.println("------++:static page or login sevrlet: "+uri.toString());
 	    	chain.doFilter(request, response);
 	    	return;
 	    }else{
 	    	res.sendRedirect("/Hipster/login.html");
 	    	return;
-	    }*/chain.doFilter(request, response);
+	    }//chain.doFilter(request, response);
 	}
 
 	/**

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +18,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.core.StandardServer;
 
 /**
  * Servlet implementation class LoginServlet
@@ -58,6 +61,18 @@ public class LoginServlet extends HttpServlet {
 			//connect to derby
 			Connection conn = Tools.getConnection();
 			stmt = conn.createStatement();
+			
+					System.err.print("loginservlet. request. name="+name+" pass="+pass+" parameters=");
+					Enumeration<String> en=request.getParameterNames();
+					 
+					while(en.hasMoreElements())
+					{
+					Object objOri=en.nextElement();
+					String param=(String)objOri;
+					String value=request.getParameter(param);
+					System.err.println(param+" "+value);
+					}
+
 			results = stmt.executeQuery("select USER_ID, PIC from USERS where "
 					+ "USERNAME='"+name+"'AND PASSWORD='"+pass+"'");
 			if(results.next()){
@@ -72,14 +87,15 @@ public class LoginServlet extends HttpServlet {
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
 	            response.addCookie(cookie);
-	            cookie = new Cookie("hipsterUid", String.valueOf(uid));
+	            System.err.println("///in loging servlet, added cookie: "+ cookie.getName());
+	            /*cookie = new Cookie("hipsterUid", String.valueOf(uid));
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
 	            response.addCookie(cookie);
 	            cookie = new Cookie("hipsterPic", pic);
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
-	            response.addCookie(cookie);
+	            response.addCookie(cookie)*/;
 	            //redirect to personal page
 	            //response.sendRedirect("/Hipster/LoginSuccess.jsp");
 	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/LoginSuccess.jsp");
