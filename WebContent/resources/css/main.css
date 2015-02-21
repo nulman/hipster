@@ -1,0 +1,14 @@
+@import 'bootstrap.less';
+@font-face {
+    font-family: Hipster;
+    src: url('../../resources/fonts/AGENCYB.TTF');
+}
+
+body {
+    background-image: url('../../resources/images/pat1.png');
+}
+
+h1{
+	font-family: Hipster;
+	display: inline;	
+}

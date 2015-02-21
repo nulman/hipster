@@ -1,19 +1,19 @@
-@import 'bootstrap.less';
-@font-face {
-    font-family: Hipster;
-    src: url('../../resources/fonts/AGENCYB.TTF');
-}
 
-body {
-    background-image: url('../../resources/images/pat1.png');
-}
 .row {
     background-color:rgba(238, 226, 219, 0.4);
     border-right-style: solid;
     border-left-style: solid;
     border-width: thick;
     border-color: #333333;
+    
 
+}
+
+#secondrow{
+	padding-bottom: 100%;
+    margin-bottom: -100%;
+    overflow: hidden;
+	
 }
 
 .col-sm-4 {
@@ -28,6 +28,14 @@ body {
 	
 }
 
-h1{
-	font-family: Hipster;	
+
+
+.form-horizontal{
+	align:left;
+}
+
+#OR{
+	font-size:450%; 
+	vertical-align: middle;
+	font-weight: bold;
 }

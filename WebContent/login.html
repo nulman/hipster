@@ -8,6 +8,7 @@
   <script type="text/javascript" src="angular.min.js"></script>
   <script type="text/javascript" src="app.js"></script>
   <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
   <link rel="stylesheet" type="text/css" href = "resources/css/login.css">
   <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -15,10 +16,10 @@
 	<script>
 	$(document).ready(function(){
 		$("#OR").mouseenter(function(){
-			$("#text").css("font-weight", "bold");
+			$("#text").css("font-size", "455%");
 	    });
 		$("#OR").mouseleave(function(){
-			$("#text").css("font-weight", "normal");
+			$("#text").css("font-size", "450%");
 	    });
 	});
 	</script>
@@ -30,14 +31,14 @@
 <div class="container">
 		<div class="row">
 		<div class="jumbotron" align="center" id="logo">
-		   <img src="resources/images/hipsterlogo2.png" alt="Hipster Logo" style="width:60%;">
+		   <img src="resources/images/hipsterlogo2.png" width=60%>
 		</div>
 		</div>
-		<div class="row">	
+		<div class="row" id="secondrow">	
 			<div class="col-sm-1"></div>
 			<div class="col-sm-4 ">
 			<h2 align="center">Login</h2>	
-				<form action="LoginServlet" method="post" class="form-horizontal" style="align:left" >
+				<form action="LoginServlet" method="post" class="form-horizontal">
 			  		Username:<br>
 					<input type="text" name="username" value="username">
 					<br>
@@ -49,22 +50,39 @@
 				</form>
 			</div>	
 			
-			<div class="col-sm-2" id= "OR" align="center" style="font-size:450%; vertical-align:middle;"><p><b>OR</b></p></div>
+			<div class="col-sm-2" id= "OR" align="center" ><p>OR</p></div>
 			
 			<div class="col-sm-4">
 			<h2 align="center">Sign Up</h2>	
+<<<<<<< HEAD
+				<form action="SignupServlet" method="post" class="form-horizontal">
+			  		Username *:<br>
+					<input type="text" name="username" required>
+=======
 				<form action="SignupServlet" method="post" class="form-horizontal" style="align:left" id="signup">
 			  		Username:<br>
 					<input type="text" name="username" value="username" required>
+>>>>>>> branch 'master' of https://github.com/nulman/hipster.git
 					<br>
+<<<<<<< HEAD
+					Password *:<br>
+					<input type="password" name="password" required>
+=======
 					Password:<br>
 					<input type="password" name="password" value="password" required>
+>>>>>>> branch 'master' of https://github.com/nulman/hipster.git
 					<br>
+<<<<<<< HEAD
+			  		Nickname *:<br>
+					<input type="text" name="nickname" required>
+=======
 			  		Nickname:<br>
 					<input type="text" name="nickname" value="nickname" required>
+>>>>>>> branch 'master' of https://github.com/nulman/hipster.git
 					<br>
 					Image URL:<br>
-					<input type="text" name="imgurl" value="imgurl">
+					<input type="hidden" name="imgurl" value= "resources/images/defaultuserimg.png">
+					<input type="text" name="imgurl">
 					<br>
 					Short Description:<br>
 					<textarea class="form-control" rows="5" name="description" form="signup" maxlength="140"></textarea>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html data-ng-app="">
+<head>
+  <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="angular.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/profile.css">
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  
+<script>
+	function func() {
+		var json= [{"DESCRIPTION":"long, duck, dong.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},
+		            {"OWNER":"100","MID":"1","STAMP":"2015-02-17 15:18:02.486","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"42.0","REPUBLISH_OF":"0","TEXT":"this is test i dont know what an href @doesnt_exist @exists #stuff"},{"reply":""},{"mention":"@exists"}];
+		var username= document.getElementsByClassName('username');
+		var avatar= document.getElementsByClassName('avatar');
+		var timestamp= document.getElementsByClassName('timestamp');
+		var textcontent= document.getElementsByClassName('textcontent');
+		
+		
+	    //document.getElementById('avatar').src = json[0].PIC;
+	    //document.getElementById("username").innerHTML = "  @"+ json[0].USERNAME;
+	    document.getElementById("nickname").innerHTML = json[0].NICKNAME;
+	    document.getElementById("description").innerHTML = json[0].DESCRIPTION;
+	    document.getElementById("followers").innerHTML = json[0].STALKERS;
+	    
+	    
+	    
+	    for(i = 0; i < username.length; i++) {
+	        username[i].innerHTML= "@" + json[0].USERNAME+" ";
+	    }
+	    
+	    for(i = 0; i < avatar.length; i++) {
+	        avatar[i].src= json[0].PIC;
+	    }
+	    
+	    for(i = 0; i < timestamp.length; i++) {
+	    	timestamp[i].innerHTML= json[1].STAMP;
+	    }
+	    for(i = 0; i < textcontent.length; i++) {
+	    	textcontent[i].innerHTML= json[1].TEXT;
+	    }
+	    
+	}
+	
+	function myFunction(response) {
+	    var arr = JSON.parse(response);
+	    var i;
+	    var out = "<table>";
+
+	    for(i = 0; i < arr.length; i++) {
+	        out += "<tr><td>" + 
+	        arr[i].Name +
+	        "</td><td>" +
+	        arr[i].City +
+	        "</td><td>" +
+	        arr[i].Country +
+	        "</td></tr>";
+	    }
+	    out += "</table>"
+	    document.getElementById("id01").innerHTML = out;
+	}
+</script>
+</head>
+
+<body onload="func()">
+
+<div class="container">
+
+		<div class="row">	
+			<div class="col-sm-5">
+				
+		<div class="panel" id="details">
+			<h1 class="nickname" id="nickname">Nickname</h1><h1 class="username"> @username </h1>
+			<br><br>
+		    <img class="avatar" id="mainavatar" src="resources/images/defaultuserimg2.png">
+			
+		        <p>
+		        	<br>
+		            With <span id="followers">100</span> Followers ,   
+		            <br>
+		            Following <span id="following">100</span> other Hipsters.
+		            <br><br>
+		            About me:<br>
+		            <span id="description">
+		            Cras justo odio, dapibus ac facilisis in, egestas Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+		            </span>
+		        </p>
+		</div>
+		
+		<div class="panel" id="newpost">
+		    <h1>Post a message:</h1>
+		        <form action=jkljkl>
+		            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
+					<input type="hidden" name="varname"  value="12345" />
+					<br><br>
+					<button class="btn btn" >Submit</button>
+		        </form>
+		</div>
+				</div>
+		
+			
+			<div class="col-sm-7 ">
+			
+			<h1> Previous Posts:</h1>
+			<div class="panel panel-default" id="usermessages">
+			  
+			  <img class="avatar" src="resources/images/defaultuserimg2.png">
+			  <span class="username"></span>wrote:
+			  <br><br>
+			  <div class="textcontent">
+			    Panel content
+			  </div>
+			  <br>
+			  <a href="replyservelet" class="reply">Reply</a>
+			  <span class="timestamp">date/time</span>
+			  
+			</div>
+		
+			</div>	
+		</div>
+</div>
+
+
+</body>
+</html>
