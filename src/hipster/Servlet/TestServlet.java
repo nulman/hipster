@@ -1,5 +1,6 @@
 package hipster.Servlet;
 
+import internals.Constants;
 import internals.Tools;
 
 import java.io.IOException;
@@ -96,7 +97,9 @@ public class TestServlet extends HttpServlet {
         }*/
 	    try{
 	    Statement stmt = conn.createStatement();
+	    Statement statement = conn.createStatement();
 	    ResultSet results = stmt.executeQuery("select * from TEXT");
+	    ResultSet other = null;
 	    ResultSetMetaData rsmd = results.getMetaData();
 	    int numberCols = rsmd.getColumnCount();
 	    Cookie[] cookies = request.getCookies();
@@ -116,7 +119,48 @@ public class TestServlet extends HttpServlet {
 				+", "+42+")");*/
 	    //System.err.println("post sql\n");
 	    results = stmt.executeQuery("select * from POSTS");
-	    Tools.ResSetToJSONRes(response, results);
+	    //Tools.ResSetToJSONRes(response, results);
+	    other = statement.executeQuery("select description,stalkers,popularity,username,nickname, pic, user_id from users where user_id=4");
+	    //Tools.ResSetToJSONRes(response, results);
+				int n =1;
+				ResultSetMetaData meta = null;
+				response.setContentType("application/json; charset="+Constants.ENCONDING);
+			    response.setCharacterEncoding(Constants.ENCONDING);
+			    JsonWriter writer = new JsonWriter(new OutputStreamWriter(response.getOutputStream(), Constants.ENCONDING));
+			    writer.beginArray();
+			    meta = other.getMetaData();
+			    while(other.next()) {
+			       writer.beginObject();
+			       // generates name:value json pairs
+			       for(int i=1,col=meta.getColumnCount(); i<=col; i++) {
+			         writer.name(meta.getColumnLabel(i));
+			         writer.value(other.getString(i));
+			       }
+			       writer.endObject();
+			    }
+			    writer.beginObject();
+			    writer.name("reply");
+			    writer.value("");
+			    writer.endObject();
+			    writer.beginObject();
+			    writer.name("mention");
+			    writer.value("@exists");
+			    writer.endObject();
+			    meta = results.getMetaData();
+			    while(results.next()) {
+			       writer.beginObject();
+			       // generates name:value json pairs
+			       for(int i=1,col=meta.getColumnCount(); i<=col; i++) {
+			         writer.name(meta.getColumnLabel(i));
+			         writer.value(results.getString(i));
+			       }
+			       writer.endObject();
+			    }
+			    
+			    writer.endArray();
+			    writer.close();
+			    response.getOutputStream().flush();
+				
 	    
 	    //out.close();
 	    /*response.setContentType("application/json; charset=UTF-8");

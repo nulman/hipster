@@ -44,13 +44,15 @@ public class Post extends HttpServlet {
 		//POSTS(owner integer, mid, stamp TIMESTAMP ,replyto integer default null, 
 				//republished int default 0,text varchar(140))
 		//disect the request to get republish#, text, cookie.username
-		int republish_id =Integer.parseInt(request.getParameter("republish").toString());
+		int republish_id = 0;
 		Connection conn = null;
 		String text=null;
 		int uid = 0;
 		Statement stmt = null;
 		ResultSet results = null;
 		ResultSet owner =null;
+		ResultSet topic = null;
+		
 		//probably "fix" text by replacing %20 with spaces if that happens in post
 		//check length of text<=140
 		text=request.getParameter("text");
@@ -75,14 +77,15 @@ public class Post extends HttpServlet {
 		    }
 		    try{
 		  //check if this is a republish
+		    republish_id =Integer.parseInt(request.getParameter("republish").toString());
 		    if(republish_id>0){
 		    	//if it is
 				//query the original posts' republish amount and republish_to
 		    	stmt = conn.createStatement();
 				results = stmt.executeQuery("select * from POSTS where "
-						+ "MID='"+republish_id+"'");
+						+ "MID="+republish_id);
 				if(results.next()){
-					//if result doesnt have the parent post
+					//if result doesnt have the parent post, get the parent
 					if(results.getInt("REPUBLISH_OF")>0){
 						results = stmt.executeQuery("select * from POSTS where "
 								+ "MID="+results.getInt("REPUBLISH_OF"));
@@ -95,7 +98,7 @@ public class Post extends HttpServlet {
 						//sql error
 					}
 					//update the republish count and popularity of the post we are republishing
-					stmt.executeQuery("UPDATE POSTS SET TIMES_REPUBLISHED="+(results.getInt("TIMES_REPUBLISHED")+1)
+					stmt.executeUpdate("UPDATE POSTS SET TIMES_REPUBLISHED="+(results.getInt("TIMES_REPUBLISHED")+1)
 							+", POPULARITY="+(Tools.Log2(2+owner.getInt("STALKERS"))*Tools.Log2(2+(results.getInt("TIMES_REPUBLISHED")+1)))
 							+" where MID="+results.getInt("MID"));
 					//get current user popularity
@@ -104,9 +107,24 @@ public class Post extends HttpServlet {
 						//sql error
 					}
 					//republish
-					stmt.execute("INSERT INTO POSTS(owner, republish_of, text, popularity) VALUES("+uid+", "
+					stmt.executeUpdate("INSERT INTO POSTS(owner, republish_of, text, popularity) VALUES("+uid+", "
 							+results.getInt("MID")+", "+results.getString("TEXT")
 							+", "+owner.getDouble("POPULARITY")+")");
+					//get the new messege id
+					results=stmt.getGeneratedKeys();
+					if(!results.next()){
+						//failed to get auto generated keys, this shouldnt happen
+					}
+					//get all the topics of the republished post
+					topic=stmt.executeQuery("select topic from topic where mid="+republish_id);
+					republish_id=results.getInt("mid");
+					//make the new post have all the topics from the original one
+					while(topic.next()){
+						stmt.executeUpdate("insert into topic(mid, topic) values("+republish_id+", '"
+								+topic.getString("topic")+"')");
+					}
+		    }else{
+		    	//we failed to retrieve the republished post, should only happen on a db error or by a smartass user
 		    }
 		}
 		//else 
@@ -118,7 +136,6 @@ public class Post extends HttpServlet {
 		//(to check if we are republishing a republish) in a loop until republish_to is null
 		//update republish amount and popularity
 		//craft a Post entry with the appropriate fields
-		    //(no need to post thesame thing twice, just link to the original text)
 		//update users number of posts and hipster rank
 		//close connection
 		
