@@ -26,8 +26,11 @@
 	    //document.getElementById('avatar').src = json[0].PIC;
 	    //document.getElementById("username").innerHTML = "  @"+ json[0].USERNAME;
 	    document.getElementById("nickname").innerHTML = json[0].NICKNAME;
-	    document.getElementById("description").innerHTML = json[0].DESCRIPTION;
+	    document.getElementById("description").innerHTML = "<b>About Me:</b><br>" + json[0].DESCRIPTION;
 	    document.getElementById("followers").innerHTML = json[0].STALKERS;
+	    document.getElementById("rank").innerHTML = "Hipster Rank: #" +json[0].USER_ID;
+	    document.getElementById("followersurl").href = "/users/"+ json[0].USERNAME+"/followers";
+	    document.getElementById("followingurl").href = "/users/"+ json[0].USERNAME+"/following";
 	    
 	    
 	    
@@ -40,7 +43,7 @@
 	    }
 	    
 	    for(i = 0; i < timestamp.length; i++) {
-	    	timestamp[i].innerHTML= json[1].STAMP;
+	    	timestamp[i].innerHTML= timeago(json[1].STAMP);
 	    }
 	    for(i = 0; i < textcontent.length; i++) {
 	    	textcontent[i].innerHTML= json[1].TEXT;
@@ -48,76 +51,88 @@
 	    
 	}
 	
-	function myFunction(response) {
-	    var arr = JSON.parse(response);
-	    var i;
-	    var out = "<table>";
-
-	    for(i = 0; i < arr.length; i++) {
-	        out += "<tr><td>" + 
-	        arr[i].Name +
-	        "</td><td>" +
-	        arr[i].City +
-	        "</td><td>" +
-	        arr[i].Country +
-	        "</td></tr>";
+	function timeago(stamp) {
+		var now=new Date(stamp.replace(' ','T')+'Z');
+		
+	    var secs = (((new Date()).getTime() / 1000) - now.getTime()/1000);
+	    Math.floor(secs);
+	    var minutes = secs / 60;
+	    secs = Math.floor(secs % 60);
+	    if (minutes < 1) {
+	        return secs + (secs > 1 ? ' seconds ago' : ' second ago');
 	    }
-	    out += "</table>"
-	    document.getElementById("id01").innerHTML = out;
+	    var hours = minutes / 60;
+	    minutes = Math.floor(minutes % 60);
+	    if (hours < 1) {
+	        return minutes + (minutes > 1 ? ' minutes ago' : ' minute ago');
+	    }
+	    var days = hours / 24;
+	    hours = Math.floor(hours % 24);
+	    if (days < 1) {
+	        return hours + (hours > 1 ? ' hours ago' : ' hour ago');
+	    }
+	    return stamp.substring(0, stamp.length - 7);;
+
+	}
+	function makemessages(){
+		var json= [{"DESCRIPTION":"long, duck, dong.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},
+		            {"OWNER":"100","MID":"1","STAMP":"2015-02-17 15:18:02.486","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"42.0","REPUBLISH_OF":"0","TEXT":"this is test i dont know what an href @doesnt_exist @exists #stuff"},{"reply":""},{"mention":"@exists"}];
+		
+		var parent= document.getElementById('messagebar');
+	       
+		for(var i = 0; i < json.length-1; i++) {
+			var div = document.getElementById('usermessages'),
+			clone = div.cloneNode(true);
+			clone.id = "usermessages"+i;
+			parent.appendChild(clone);     
+		   }
 	}
 </script>
 </head>
 
-<body onload="func()">
+<body onload="func();makemessages() ">
 
 <div class="container">
 
 		<div class="row">	
-			<div class="col-sm-5">
+			<div class="col-sm-4">
 				
-		<div class="panel" id="details">
-			<h1 class="nickname" id="nickname">Nickname</h1><h1 class="username"> @username </h1>
-			<br><br>
-		    <img class="avatar" id="mainavatar" src="resources/images/defaultuserimg2.png">
-			
-		        <p>
-		        	<br>
-		            With <span id="followers">100</span> Followers ,   
-		            <br>
-		            Following <span id="following">100</span> other Hipsters.
-		            <br><br>
-		            About me:<br>
-		            <span id="description">
-		            Cras justo odio, dapibus ac facilisis in, egestas Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-		            </span>
-		        </p>
-		</div>
-		
-		<div class="panel" id="newpost">
-		    <h1>Post a message:</h1>
-		        <form action=jkljkl>
-		            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-					<input type="hidden" name="varname"  value="12345" />
+				<div class="panel" id="details">
+					<h1 class="nickname" id="nickname">Nickname</h1><h1 class="username"> @username </h1>
+					<br>
+					<h3 id=rank></h3>
 					<br><br>
-					<button class="btn btn" >Submit</button>
-		        </form>
-		</div>
+					
+				    <img class="avatar" id="mainavatar" src="resources/images/defaultuserimg2.png">
+					
+				        <p>
+				        	<br>
+				            With <span id="followers">100</span><a href="" id="followersurl">  Followers </a>,   
+				            <br>
+				            <a href="" id="followingurl">Following </a><span id="following">100</span> other Hipsters.
+				            <br><br>
+				            
+				            <span id="description"></span>
+				            
+				        </p>
 				</div>
-		
-			
-			<div class="col-sm-7 ">
-			
+			</div>
+
+			<div class="col-sm-8 " id="messagebar">
+			<br><br>
 			<h1> Previous Posts:</h1>
-			<div class="panel panel-default" id="usermessages">
+			
+			<div class="usermessages" id="usermessages">
 			  
-			  <img class="avatar" src="resources/images/defaultuserimg2.png">
-			  <span class="username"></span>wrote:
+			  <img class="avatar" src="resources/images/defaultuserimg2.png" align="bottom">
+			  <h3 class="username"></h3><h3>wrote:</h3>
 			  <br><br>
 			  <div class="textcontent">
 			    Panel content
 			  </div>
 			  <br>
 			  <a href="replyservelet" class="reply">Reply</a>
+			  <a href="republishservelet" class="rebuplish">Republish</a>
 			  <span class="timestamp">date/time</span>
 			  
 			</div>

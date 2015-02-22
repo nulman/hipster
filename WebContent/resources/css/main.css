@@ -4,11 +4,31 @@
     src: url('../../resources/fonts/AGENCYB.TTF');
 }
 
+@variables colors {
+  borders: #333333;
+  highlight: rgb(238, 226, 219);
+  background: rgba(238, 226, 219, 0.4);
+}
+
+
 body {
     background-image: url('../../resources/images/pat1.png');
 }
 
-h1{
+h1,h2,h3,h4,h5,h6{
 	font-family: Hipster;
 	display: inline;	
+}
+
+a{
+	font-weight: bold;
+	color: #333333;
+}
+a:hover{
+	color: #f9f4f2;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
 }

@@ -1,3 +1,5 @@
+@import url("main.css");
+
 
 .row {
     background-color:rgba(238, 226, 219, 0.4);
@@ -21,6 +23,7 @@
     border-radius: 10px;
     margin-bottom: 20px;
     padding: 2%;
+    border: 1px solid;
 }
 
 .jumbotron{
