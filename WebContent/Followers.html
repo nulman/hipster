@@ -9,7 +9,7 @@
   <script type="text/javascript" src="app.js"></script>
   <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
-  <link rel="stylesheet" type="text/css" href = "resources/css/profile.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/Followers.css">
   <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   
@@ -40,9 +40,8 @@ xmlhttp.send();
   
 <script>
 	function func() {
-		var json= getJSON();
-			//[{"DESCRIPTION":"long, duck, dong.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},
-		      //      {"OWNER":"100","MID":"1","STAMP":"2015-02-17 15:18:02.486","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"42.0","REPUBLISH_OF":"0","TEXT":"this is test i dont know what an href @doesnt_exist @exists #stuff"},{"reply":""},{"mention":"@exists"}];
+		var json= [{"DESCRIPTION":"long, duck, dong.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},
+		          {"OWNER":"100","MID":"1","STAMP":"2015-02-17 15:18:02.486","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"42.0","REPUBLISH_OF":"0","TEXT":"this is test i dont know what an href @doesnt_exist @exists #stuff"},{"reply":""},{"mention":"@exists"}];
 		var username= document.getElementsByClassName('username');
 		var avatar= document.getElementsByClassName('avatar');
 		var timestamp= document.getElementsByClassName('timestamp');
@@ -76,40 +75,17 @@ xmlhttp.send();
 	    }
 	    
 	    
-	    var parent= document.getElementById('messagebar');
+	    var parent= document.getElementById('followerslist');
 	       
-		for(var i = 0; i < json.length-1; i++) {
-			var div = document.getElementById('usermessages'),
+		for(var i = 0; i < 10; i++) {
+			var div = document.getElementById('users'),
 			clone = div.cloneNode(true);
-			clone.id = "usermessages"+i;
+			clone.id = "users"+i;
 			parent.appendChild(clone);     
 		   }
 	    
 	}
 	
-	function timeago(stamp) {
-		var now=new Date(stamp.replace(' ','T')+'Z');
-		
-	    var secs = (((new Date()).getTime() / 1000) - now.getTime()/1000);
-	    Math.floor(secs);
-	    var minutes = secs / 60;
-	    secs = Math.floor(secs % 60);
-	    if (minutes < 1) {
-	        return secs + (secs > 1 ? ' seconds ago' : ' second ago');
-	    }
-	    var hours = minutes / 60;
-	    minutes = Math.floor(minutes % 60);
-	    if (hours < 1) {
-	        return minutes + (minutes > 1 ? ' minutes ago' : ' minute ago');
-	    }
-	    var days = hours / 24;
-	    hours = Math.floor(hours % 24);
-	    if (days < 1) {
-	        return hours + (hours > 1 ? ' hours ago' : ' hour ago');
-	    }
-	    return stamp.substring(0, stamp.length - 7);;
-
-	}
 
 </script>
 </head>
@@ -142,24 +118,19 @@ xmlhttp.send();
 				</div>
 			</div>
 
-			<div class="col-sm-8 " id="messagebar">
+			<div class="col-sm-8 " id="followerslist">
 			<br><br>
-			<h1> Previous Posts:</h1>
-			
-			<div class="usermessages" id="usermessages">
-			  
-			  <img class="avatar" src="resources/images/defaultuserimg2.png" align="bottom">
-			  <h3 class="username"></h3><h3>wrote:</h3>
-			  <br><br>
-			  <div class="textcontent">
-			    Panel content
-			  </div>
-			  <br>
-			  <a href="replyservelet" class="reply">Reply</a>
-			  <a href="republishservelet" class="rebuplish">Republish</a>
-			  <span class="timestamp">date/time</span>
-			  
-			</div>
+			<h1> Followers:</h1>
+			<br><br>
+				<div class="users" id="users">
+				  
+				  <img class="avatar" src="resources/images/defaultuserimg2.png" align="bottom">
+				  <h3 class="username"></h3>
+		
+				  <button class="btn btn" id="follow"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Follow</button>
+	
+				  
+				</div>
 		
 			</div>	
 		</div>
