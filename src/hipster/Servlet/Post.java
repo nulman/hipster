@@ -63,7 +63,7 @@ public class Post extends HttpServlet {
 		
 		//check if we got a reply_to
 		temp = request.getParameter("reply_to");
-		if(temp!=null){
+		if(temp.length()>0){
 			reply_to=Integer.parseInt(temp);
 		}
 		//probably "fix" text by replacing %20 with spaces if that happens in post
