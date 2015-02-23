@@ -49,6 +49,16 @@
 	    	textcontent[i].innerHTML= json[1].TEXT;
 	    }
 	    
+	    
+	    var parent= document.getElementById('messagebar');
+	       
+		for(var i = 0; i < json.length-1; i++) {
+			var div = document.getElementById('usermessages'),
+			clone = div.cloneNode(true);
+			clone.id = "usermessages"+i;
+			parent.appendChild(clone);     
+		   }
+	    
 	}
 	
 	function timeago(stamp) {
@@ -74,23 +84,11 @@
 	    return stamp.substring(0, stamp.length - 7);;
 
 	}
-	function makemessages(){
-		var json= [{"DESCRIPTION":"long, duck, dong.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},
-		            {"OWNER":"100","MID":"1","STAMP":"2015-02-17 15:18:02.486","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"42.0","REPUBLISH_OF":"0","TEXT":"this is test i dont know what an href @doesnt_exist @exists #stuff"},{"reply":""},{"mention":"@exists"}];
-		
-		var parent= document.getElementById('messagebar');
-	       
-		for(var i = 0; i < json.length-1; i++) {
-			var div = document.getElementById('usermessages'),
-			clone = div.cloneNode(true);
-			clone.id = "usermessages"+i;
-			parent.appendChild(clone);     
-		   }
-	}
+
 </script>
 </head>
 
-<body onload="func();makemessages() ">
+<body onload="func();">
 
 <div class="container">
 
