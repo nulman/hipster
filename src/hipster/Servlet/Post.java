@@ -5,6 +5,7 @@ import internals.Tools;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class Post extends HttpServlet {
 		String text=null;
 		int reply_to = 0;
 		String temp= null;
+		String [] returnGeneratedMID = new String [] { "MID" };
 		int uid = 0;
 		int mid = 0;
 		double popularity = 0.0;
@@ -63,7 +65,7 @@ public class Post extends HttpServlet {
 		
 		//check if we got a reply_to
 		temp = request.getParameter("reply_to");
-		if(temp.length()>0){
+		if(temp!=null && temp.length()>0){
 			reply_to=Integer.parseInt(temp);
 		}
 		//probably "fix" text by replacing %20 with spaces if that happens in post
@@ -92,20 +94,29 @@ public class Post extends HttpServlet {
 		    	// we will need at least one sql statement
 		    	stmt = conn.createStatement();
 		    	//initial popularity of posts is based on the amount of followers the user has
-				owner = stmt.executeQuery("SELECT STALKERS,NAME FROM USERS WHERE USER_ID="+uid);
+				owner = stmt.executeQuery("SELECT POPULARITY FROM USERS WHERE USER_ID="+uid);
 				if(!owner.next()){
 					//sql error
 				}
 				popularity = owner.getDouble("popularity");
-		  //check if this is a republish
-		    republish_id =Integer.parseInt(request.getParameter("republish"));
-		    if(republish_id>0){
-		    	//if it is
-				//query the original posts' republish amount and republish_of
-		    	stmt2 = conn.createStatement();
-		    	stmt3 = conn.createStatement();
-				results = stmt.executeQuery("select * from POSTS where "
-						+ "MID="+republish_id);
+	System.err.println("0");
+				//check if this is a republish
+				temp = request.getParameter("republish");
+	System.err.println("0.4");
+				if(temp!=null && temp.length()>0){
+	System.err.println("0.5");
+				republish_id=Integer.parseInt(temp);
+				}
+	republish_id=502;//delete this line!	
+	System.err.println("0.6 did you delete the linea bove me?(manual alocation of republish_id)");
+				if(republish_id>1){
+	System.err.println("0.7");
+			    	//if it is
+					//query the original posts' republish amount and republish_of
+			    	stmt2 = conn.createStatement();
+			    	stmt3 = conn.createStatement();
+					results = stmt.executeQuery("select * from POSTS where "
+							+ "MID="+republish_id);
 				if(results.next()){
 					//if result doesnt have the parent post, get the parent
 					if(results.getInt("REPUBLISH_OF")>0){
@@ -115,26 +126,31 @@ public class Post extends HttpServlet {
 							//error retrieving the original post. this shouldnt happen.
 						}
 					}
+	System.err.println("0.71");
 					//get the message id of teh original publish
 					republish_id=results.getInt("mid");
-					owner = stmt2.executeQuery("select STALKERS from USESRS where USER_ID="+results.getInt("OWNER"));
+					owner = stmt2.executeQuery("select STALKERS from USERS where USER_ID="+results.getInt("OWNER"));
 					if(!owner.next()){
 						//sql error
 					}
 					//update the republish count and popularity of the post we are republishing
-					stmt.executeUpdate("UPDATE POSTS SET TIMES_REPUBLISHED="+(results.getInt("TIMES_REPUBLISHED")+1)
+					stmt3.executeUpdate("UPDATE POSTS SET TIMES_REPUBLISHED="+(results.getInt("TIMES_REPUBLISHED")+1)
 							+", POPULARITY="+(Tools.Log2(2+owner.getInt("STALKERS"))*Tools.Log2(2+(results.getInt("TIMES_REPUBLISHED")+1)))
 							+" where MID="+results.getInt("MID"));
+	System.err.println("0.72");
 					//republish
-					stmt.executeUpdate("INSERT INTO POSTS(owner, republish_of, text, popularity) VALUES("+uid+", "
+					stmt2.executeUpdate("INSERT INTO POSTS(owner, republish_of, text, popularity) VALUES("+uid+", "
 							+results.getInt("MID")+", '"+results.getString("TEXT")
-							+"', "+Tools.Log2(2+popularity)+")");
+							+"', "+Tools.Log2(2+popularity)+")",returnGeneratedMID);
 					//get the new messege id
-					results=stmt.getGeneratedKeys();
+					results=stmt2.getGeneratedKeys();
+	System.err.println("0.73");
 					if(!results.next()){
 						//failed to get auto generated keys, this shouldnt happen
+						return;
 					}
-					mid=results.getInt("mid");
+					mid=results.getInt(1);
+	System.err.println("0.74");
 					//get all the topics of the republished post
 					topic=stmt3.executeQuery("select topic from topic where mid="+republish_id);
 					//make the new post have all the topics from the original one
@@ -142,11 +158,13 @@ public class Post extends HttpServlet {
 						stmt.executeUpdate("insert into topic(mid, topic) values("+mid+", '"
 								+topic.getString("topic")+"')");
 					}
+	System.err.println("0.75");
 					//add all the mentions from the original publish to this republish
-					results = stmt.executeQuery("select mentioner from mentions where mentioner="+republish_id);
+					results = stmt.executeQuery("select mentionee from mentions where mentioner="+republish_id);
 					while(results.next()){
-					stmt2.execute("insert into mentions(mentionee,mentioner) values("+mid+","+results.getInt("mentioner")+")");
+					stmt2.executeUpdate("insert into mentions(mentioner,mentionee) values("+mid+","+results.getInt("mentionee")+")");
 					}
+	System.err.println("0.76");
 					
 					
 		    }else{
@@ -154,35 +172,53 @@ public class Post extends HttpServlet {
 		    }
 		}else{
 			//normal publish or reply
+			System.err.println("1");
 			if(text.length()==0){
 				//we dont allow empty posts
 				return;
 			}
 			System.err.println("about to post: "+text);
-			stmt.executeUpdate("INSERT INTO POSTS(owner, text, popularity, replyto) VALUES("+uid+", "
-					+", '"+text+"," + ", "+Tools.Log2(2+popularity)+reply_to+")");
+			stmt.executeUpdate("INSERT INTO POSTS(owner, text, popularity, replyto) VALUES("+uid
+					+", '"+text+"', "+Tools.Log2(2+popularity)+", "+reply_to+")", returnGeneratedMID);
+			System.err.println("2");
 			//get the new messege id
 			results=stmt.getGeneratedKeys();
-			if(!results.next()){
+			//if(!results.next()){
 				//failed to get auto generated keys, this shouldnt happen
-			}
-			mid = results.getInt("mid");	
+			//}
+			System.err.println("2.5");
+		       if (!results.next()) {
+		    		//failed to get mid
+		    		return;
+		    	}
+		       mid = results.getInt(1);
+			System.err.println(mid+"\n3");
 			//cuts out all the words in the text that start with @
 			String [] prework = text.split(" ");
 			for(String mention : prework){
 				if(mention.startsWith("@")){
+					results = stmt.executeQuery("select user_id from users where nickname='"+mention.substring(1)+"'");
+					if(!results.next()){
+						continue;
+					}
 					//adds relevant information to the mentions(id of the person that is mentioned, id of the mentioning post) table	
 					stmt.executeUpdate("insert into mentions(mentionee, mentioner) values((select user_id from users where nickname='"
-							+mention.substring(1)+"') as temp,"+mid+")");
+							+mention.substring(1)+"') ,"+mid+")");
+					System.err.print(mention+" ");
 				}
 			}
+			System.err.println();
+			System.err.println("4");
 			//get all the subject
 			for(String subject : prework){
 				if(subject.startsWith("#")){
 					//add relevant topics to the subjects table
 					stmt.executeUpdate("insert into topic(mid,topic) values("+mid+",'"+subject+"')");
+					System.err.print(subject+" ");
 				}
 			}	
+			System.err.println();
+			System.err.println("5");
 		}
 		    }catch (SQLException e) {
 				// TODO Auto-generated catch block
