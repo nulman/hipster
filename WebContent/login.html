@@ -28,31 +28,35 @@
 <body>
 <div class="container">
 		<div class="row">
-		<div class="jumbotron" align="center" id="logo">
-		   <img src="resources/images/hipsterlogo2.png" width=60%>
+		
+		<div class="col-sm-8">
+			<img src="resources/images/hipsterlogo2.png" width=100%>
 		</div>
-		</div>
-		<div class="row" id="secondrow">	
-			<div class="col-sm-1"></div>
-			<div class="col-sm-4 ">
-			<h2 align="center">Login</h2>	
+		
+		<div class="col-sm-4">
+		
+			<br><br>
+			<div class="panels">
+			<h1 align="center">Login</h1>
+			<br><br>	
 				<form action="LoginServlet" method="post" class="form-horizontal">
 			  		Username:<br>
-					<input type="text" name="username" placeholder="username">
+					<input type="text" name="username" value="username">
 					<br>
 					Password:<br>
-					<input type="password" name="password" placeholder="password">
+					<input type="password" name="password" value="password">
 					<br><br>
 		
 				<button class="btn btn" data-ng-disabled="error || incomplete">Submit</button>
 				</form>
 			</div>	
 			
-			<div class="col-sm-2" id= "OR" align="center" ><p>OR</p></div>
+			<h1 align="center" id="OR">OR</h1>
 			
-			<div class="col-sm-4">
-			<h2 align="center">Sign Up</h2>	
-				<form action="SignupServlet" method="post" class="form-horizontal">
+			<div class="panels">
+			<h1 align="center">Sign Up</h1>
+			<br><br>	
+				<form action="SignupServlet" method="post" class="form-horizontal" style="align:left" id="signup">
 			  		Username *:<br>
 					<input type="text" name="username" required>
 					<br>
@@ -68,14 +72,18 @@
 					<br>
 					Short Description:<br>
 					<textarea class="form-control" rows="5" name="description" form="signup" maxlength="140"></textarea>
-					<br><br>
+					<br>
 		
 				<button class="btn btn" data-ng-disabled="error || incomplete">Submit</button>
 				</form>
 			</div>
-			<div class="col-sm-1"></div>
+			
+			<br><br>
 			
 		</div>
+		
+		</div>
+		
 </div>
 
 

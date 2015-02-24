@@ -1,12 +1,12 @@
-@import url("main.css");
-
-
 .row {
     background-color:rgba(238, 226, 219, 0.4);
     border-right-style: solid;
     border-left-style: solid;
-    border-width: thick;
+    border-width: 15px;
     border-color: #333333;
+	padding-bottom: 100%;
+    margin-bottom: -100%;
+    overflow: hidden;
     
 
 }
@@ -15,15 +15,16 @@
 	padding-bottom: 100%;
     margin-bottom: -100%;
     overflow: hidden;
+	max-height: 50%;
 	
 }
 
 .col-sm-4 {
     background-color:rgba(238, 226, 219, 0.4);
-    border-radius: 10px;
-    margin-bottom: 20px;
-    padding: 2%;
-    border: 1px solid;
+	padding-bottom: 100%;
+    margin-bottom: -100%;
+    overflow: hidden;
+    align: center;
 }
 
 .jumbotron{
@@ -31,7 +32,11 @@
 	
 }
 
-
+.panels{
+	padding: 5%;
+	vertical-align: middle;
+	align: cetner;
+}
 
 .form-horizontal{
 	align:left;
@@ -39,6 +44,6 @@
 
 #OR{
 	font-size:450%; 
-	vertical-align: middle;
 	font-weight: bold;
+	text-align: cetner;
 }

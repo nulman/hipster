@@ -12,7 +12,9 @@
 
 
 body {
-    background-image: url('../../resources/images/pat1.png');
+    background-image: url('../../resources/images/hipster-wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -25,10 +27,14 @@ a{
 	color: #333333;
 }
 a:hover{
-	color: #f9f4f2;
+	color: #ffffff;
 }
 
 a:hover, a:visited, a:link, a:active
 {
     text-decoration: none;
+}
+
+.img {
+  filter: sepia(100%);
 }

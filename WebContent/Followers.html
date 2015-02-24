@@ -40,8 +40,8 @@ xmlhttp.send();
   
 <script>
 	function func() {
-		var json= [{"DESCRIPTION":"long, duck, dong.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},
-		          {"OWNER":"100","MID":"1","STAMP":"2015-02-17 15:18:02.486","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"42.0","REPUBLISH_OF":"0","TEXT":"this is test i dont know what an href @doesnt_exist @exists #stuff"},{"reply":""},{"mention":"@exists"}];
+		var user= [{"DESCRIPTION":"woohoo","STALKERS":"0","POPULARITY":"1.0","USERNAME":"Barry","NICKNAME":"otherBarry","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg","USER_ID":"3"}];
+		var followers= [{"DESCRIPTION":"long,duck,long.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user","NICKNAME":"nick","PIC":"http://38.media.tumblr.com/avatar_65a3dde32c04_128.png","USER_ID":"4"},{"DESCRIPTION":"long, duck,long.","STALKERS":"0","POPULARITY":"1.0","USERNAME":"user2","NICKNAME":"nick2","USER_ID":"5"}];
 		
 		
 		var username= document.getElementsByClassName('username');
@@ -52,39 +52,53 @@ xmlhttp.send();
 		
 	    //document.getElementById('avatar').src = json[0].PIC;
 	    //document.getElementById("username").innerHTML = "  @"+ json[0].USERNAME;
-	    document.getElementById("nickname").innerHTML = json[0].NICKNAME;
-	    document.getElementById("description").innerHTML = "<b>About Me:</b><br>" + json[0].DESCRIPTION;
-	    document.getElementById("followers").innerHTML = json[0].STALKERS;
-	    document.getElementById("rank").innerHTML = "Hipster Rank: #" +json[0].USER_ID;
-	    document.getElementById("followersurl").href = "/users/"+ json[0].USERNAME+"/followers";
-	    document.getElementById("followingurl").href = "/users/"+ json[0].USERNAME+"/following";
+	    document.getElementById("nickname").innerHTML = user[0].NICKNAME;
+	    document.getElementById("description").innerHTML = "<b>About Me:</b><br>" + user[0].DESCRIPTION;
+	    document.getElementById("followers").innerHTML = user[0].STALKERS;
+	    document.getElementById("rank").innerHTML = "Hipster Rank: #" +user[0].USER_ID;
+	    document.getElementById("followersurl").href = "/users/"+ user[0].USERNAME+"/followers";
+	    document.getElementById("followingurl").href = "/users/"+ user[0].USERNAME+"/following";
 	    
 	    
 	    
 	    for(i = 0; i < username.length; i++) {
-	        username[i].innerHTML= "@" + json[0].USERNAME+" ";
+	        username[i].innerHTML= "@" + user[0].USERNAME+" ";
 	    }
 	    
 	    for(i = 0; i < avatar.length; i++) {
-	        avatar[i].src= json[0].PIC;
+	        avatar[i].src= user[0].PIC;
 	    }
 	    
 	    for(i = 0; i < timestamp.length; i++) {
-	    	timestamp[i].innerHTML= timeago(json[1].STAMP);
+	    	timestamp[i].innerHTML= timeago(user[1].STAMP);
 	    }
 	    for(i = 0; i < textcontent.length; i++) {
-	    	textcontent[i].innerHTML= json[1].TEXT;
+	    	textcontent[i].innerHTML= user[1].TEXT;
 	    }
 	    
 	    
 	    var parent= document.getElementById('followerslist');
 	       
-		for(var i = 0; i < 10; i++) {
+		for(var i = 0; i<followers.length-1; i++) {
 			var div = document.getElementById('users'),
 			clone = div.cloneNode(true);
-			clone.id = "users"+i;
 			parent.appendChild(clone);     
 		   }
+		
+		var fusername= document.getElementsByClassName('fusername');
+		
+		for(var i=0; i<followers.length; i++){
+			fusername[i].innerHTML= "@"+followers[i].USERNAME;
+			
+		}
+		
+		var favatar= document.getElementsByClassName('favatar');
+		
+		for(var i=0; i<followers.length; i++){
+			favatar[i].src= followers[i].PIC;
+			
+		}
+		
 	    
 	}
 	
@@ -100,7 +114,7 @@ xmlhttp.send();
 			<div class="col-sm-4">
 				
 				<div class="panel" id="details">
-					<h1 class="nickname" id="nickname">Nickname</h1><h1 class="username"> @username </h1>
+					<h1 class="nickname" id="nickname">Nickname</h1><br><h1 class="username">@username </h1>
 					<br>
 					<h3 id=rank></h3>
 					<br><br>
@@ -126,8 +140,8 @@ xmlhttp.send();
 			<br><br>
 				<div class="users" id="users">
 				  
-				  <img class="avatar" src="resources/images/defaultuserimg2.png" align="bottom">
-				  <h3 class="username"></h3>
+				  <img class="favatar" src="resources/images/defaultuserimg2.png" align="bottom">
+				  <h3 class="fusername" id="fusername"></h3>
 		
 				  <button class="btn btn" id="follow"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Follow</button>
 	
