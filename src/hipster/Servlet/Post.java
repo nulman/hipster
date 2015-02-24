@@ -107,7 +107,7 @@ public class Post extends HttpServlet {
 	System.err.println("0.5");
 				republish_id=Integer.parseInt(temp);
 				}
-	republish_id=502;//delete this line!	
+	//republish_id=1004;//delete this line!	
 	System.err.println("0.6 did you delete the linea bove me?(manual alocation of republish_id)");
 				if(republish_id>1){
 	System.err.println("0.7");
@@ -162,7 +162,7 @@ public class Post extends HttpServlet {
 					//add all the mentions from the original publish to this republish
 					results = stmt.executeQuery("select mentionee from mentions where mentioner="+republish_id);
 					while(results.next()){
-					stmt2.executeUpdate("insert into mentions(mentioner,mentionee) values("+mid+","+results.getInt("mentionee")+")");
+					stmt2.executeUpdate("insert into mentions(mentioner,mentionee) values("+mid+",'"+results.getString("mentionee")+"')");
 					}
 	System.err.println("0.76");
 					
@@ -176,6 +176,37 @@ public class Post extends HttpServlet {
 			if(text.length()==0){
 				//we dont allow empty posts
 				return;
+			}
+			//cuts out all the words in the text that start with @
+			String [] prework = text.split(" ");
+			String mentions = null;
+			for(String mention : prework){
+				if(mention.startsWith("@")){
+					results = stmt.executeQuery("select user_id from users where nickname='"+mention.substring(1)+"'");
+					if(!results.next()){
+						continue;
+					}
+					//replace legal @mentions with link to profile pages of relevant users
+					text=text.replace(mention, "<a href=\"/Hipster/users/"+mention.substring(1)+"\">"+mention+"</a>");
+					//constructs a string of mentions "@mention,@mention2..."
+					if(mentions == null){
+						mentions= new StringBuilder().append(mention).toString();
+						System.err.println("mentions was empty and is now: "+mentions);
+					}else{
+						mentions= new StringBuilder().append(mentions).append(",").append(mention).toString();
+						System.err.println("mentions was NOT empty and is now: "+mentions);
+					}
+				}
+			}
+			//get all the subject
+			for(String subject : prework){
+				if(subject.startsWith("#")){
+					//replace all #topics with links to the topic
+					text=text.replace(subject, "<a href=\"/Hipster/topic/"+subject.substring(1)+"\">"+subject+"</a>");
+					//add relevant topics to the subjects table
+					stmt.executeUpdate("insert into topic(mid,topic) values("+mid+",'"+subject+"')");
+					System.err.print(subject+" ");
+				}
 			}
 			System.err.println("about to post: "+text);
 			stmt.executeUpdate("INSERT INTO POSTS(owner, text, popularity, replyto) VALUES("+uid
@@ -193,30 +224,15 @@ public class Post extends HttpServlet {
 		    	}
 		       mid = results.getInt(1);
 			System.err.println(mid+"\n3");
-			//cuts out all the words in the text that start with @
-			String [] prework = text.split(" ");
-			for(String mention : prework){
-				if(mention.startsWith("@")){
-					results = stmt.executeQuery("select user_id from users where nickname='"+mention.substring(1)+"'");
-					if(!results.next()){
-						continue;
-					}
-					//adds relevant information to the mentions(id of the person that is mentioned, id of the mentioning post) table	
-					stmt.executeUpdate("insert into mentions(mentionee, mentioner) values((select user_id from users where nickname='"
-							+mention.substring(1)+"') ,"+mid+")");
-					System.err.print(mention+" ");
-				}
+			
+			//adds relevant information to the mentions(id of the person that is mentioned, id of the mentioning post) table
+			if (mentions!=null){
+			stmt.executeUpdate("insert into mentions(mentionee, mentioner) values('"+mentions+"' ,"+mid+")");
+			System.err.print("inserted into mentions: "+mentions);
 			}
 			System.err.println();
 			System.err.println("4");
-			//get all the subject
-			for(String subject : prework){
-				if(subject.startsWith("#")){
-					//add relevant topics to the subjects table
-					stmt.executeUpdate("insert into topic(mid,topic) values("+mid+",'"+subject+"')");
-					System.err.print(subject+" ");
-				}
-			}	
+				
 			System.err.println();
 			System.err.println("5");
 		}

@@ -118,11 +118,21 @@ public class TestServlet extends HttpServlet {
 				+"'this is another test  <a href=http://youtu.be/dQw4w9WgXcQ>@hrefs</a>  i dont know what an href looks like'"
 				+", "+42+")");*/
 	    //System.err.println("post sql\n");
-	    results = stmt.executeQuery("select * from POSTS");
+	    System.err.println(request.getContextPath());
+	    response.sendRedirect("/Hipster/LoginSuccess.jsp");
+	    results = stmt.executeQuery("select * from posts inner join mentions on mentions.mentioner=posts.mid where posts.mid=502");
+	    ResultSetMetaData meta = results.getMetaData();
+	    while(results.next()) {
+	       // generates name:value json pairs
+	       for(int i=1,col=meta.getColumnCount(); i<=col; i++) {
+	         System.err.print(meta.getColumnLabel(i)+" : ");
+	         System.err.println(results.getString(i));
+	       }
+	    }
 	    //Tools.ResSetToJSONRes(response, results);
 	    other = statement.executeQuery("select description,stalkers,popularity,username,nickname, pic, user_id from users where user_id=4");
 	    //Tools.ResSetToJSONRes(response, results);
-				int n =1;
+				/*int n =1;
 				ResultSetMetaData meta = null;
 				response.setContentType("application/json; charset="+Constants.ENCONDING);
 			    response.setCharacterEncoding(Constants.ENCONDING);
@@ -159,7 +169,7 @@ public class TestServlet extends HttpServlet {
 			    
 			    writer.endArray();
 			    writer.close();
-			    response.getOutputStream().flush();
+			    response.getOutputStream().flush();*/
 				
 	    
 	    //out.close();
@@ -192,7 +202,7 @@ public class TestServlet extends HttpServlet {
         		out.print(results.getString(i) + "\t\t");
         	out.println("\n");
 	    }*/
-        	
+        	conn.close();
 	    }catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();

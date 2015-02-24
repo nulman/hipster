@@ -19,3 +19,6 @@ alter table POSTS drop column text
 drop table posts
 alter table users add popularity double default 1.0
 alter table users add column description varchar(140) default null
+delete from topic
+alter table mentions add column mentionee varchar(140)
+alter table posts alter column text set data type varchar(500)
