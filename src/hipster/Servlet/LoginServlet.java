@@ -106,7 +106,7 @@ public class LoginServlet extends HttpServlet {
 				//close DB connection
 				conn.close();
 	            //PrintWriter out= response.getWriter();
-	            out.println("<font color=red>Your creds aren\'t legit enough for Hipster.</font>");
+	            out.println("<a href=\"/Hipster/TestServlet\"><font color=red>Your creds aren\'t legit enough for Hipster.</font></a>");
 	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
 	            rd.include(request, response);
 	            //response.sendRedirect("/Hipster/login.html");
