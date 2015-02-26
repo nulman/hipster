@@ -18,6 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.core.StandardServer;
 
@@ -50,6 +51,8 @@ public class LoginServlet extends HttpServlet {
 		String name = null;
 		String pass = null;
 		String pic = null;
+		String stalkee_list = null;
+		HttpSession session = null;
 		int uid =0;
 		Statement stmt = null;
 		ResultSet results = null;
@@ -72,18 +75,17 @@ public class LoginServlet extends HttpServlet {
 					String value=request.getParameter(param);
 					System.err.println(param+" "+value);
 					}*/
-
-			results = stmt.executeQuery("select USER_ID, PIC from USERS where "
+		System.err.println("about to query");
+			results = stmt.executeQuery("select USER_ID, PIC, USERNAME, NICKNAME from USERS where "
 					+ "USERNAME='"+name+"'AND PASSWORD='"+pass+"'");
+		System.err.println("got this far");
 			if(results.next()){
 				uid=results.getInt("USER_ID");
 				pic=results.getString("PIC");
-				//close DB connection
-				conn.close();
 	//this doesnt get sent...
 	out.println("<font color=red size=20>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
 	System.err.println("<font color=red>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
-				Cookie cookie = new Cookie("hipsterUser", name);
+				/*Cookie cookie = new Cookie("hipsterUser", name);
 	            // setting cookie to expiry in 60 mins
 				cookie.setMaxAge(60 * 60);
 	            response.addCookie(cookie);
@@ -97,10 +99,30 @@ public class LoginServlet extends HttpServlet {
 				cookie.setMaxAge(60 * 60);
 	            response.addCookie(cookie);
 	            //redirect to personal page
-	            //response.sendRedirect("/Hipster/LoginSuccess.jsp");
+	            //response.sendRedirect("/Hipster/LoginSuccess.jsp");*/
+				session = request.getSession();
+				session.setAttribute("username", results.getString("username"));
+				session.setAttribute("user_id", results.getInt("user_id"));
+				session.setAttribute("nickname", results.getString("nickname"));
+				session.setAttribute("photo", results.getString("pic"));
+				results = stmt.executeQuery("select stalkee from stalker where stalker='"
+				+results.getString("nickname")+"'");
+				if(results.next()){
+					stalkee_list = results.getString("stalkee");
+				}
+				while(results.next()){
+					stalkee_list = new StringBuilder().append(stalkee_list).append(",")
+							.append(results.getString("stalkee")).toString();
+				}
+				
+				session.setAttribute("stalkee_list", stalkee_list);
+				session.setMaxInactiveInterval(60*30);
+
 	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/LoginSuccess.jsp");
 	            rd.include(request, response);
 	            out.close();
+	          //close DB connection
+				conn.close();
 	            return;
 			}else{
 				//close DB connection
@@ -113,7 +135,7 @@ public class LoginServlet extends HttpServlet {
 	            out.close();
 	            return;
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

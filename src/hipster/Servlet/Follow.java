@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class Follow
@@ -44,45 +45,62 @@ public class Follow extends HttpServlet {
 		
 		
 		Connection conn = null;
-		int user_id = 0;
 		double popularity = 0.0;
-		String temp = null;
-		user_id = 0;
+		String stalkee = null;
 		Statement stmt= null;
 		ResultSet  results = null;
+		HttpSession session = request.getSession(false);
+		String stalker = session.getAttribute("nickname").toString();
+		String stalkee_list = null;
+		int stalkee_id = 0;
 		
-		temp = request.getParameter("user_id");
-		if(temp!=null && temp.length()>0){
-			user_id=Integer.parseInt(temp);
+		stalkee = request.getParameter("nickname");
+		if(stalkee==null){
+			//bad request!
+			return;
 		}
+
 		try{
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
 			//check for duplicate
-			results = stmt.executeQuery("select * from stalker where stalker="+user_id+" stalkee="+current_user+")");
+			results = stmt.executeQuery("select * from stalker where stalker='"+stalker+"' stalkee='"+stalkee+"')");
 			if(results.next()){
 				//this is a duplicate, handle it
 				return;
 			}
+			results = stmt.executeQuery("select user_id from users where nickname='"+stalkee+"'");
+			if(!results.next()){
+				//no such user
+				return;
+			}
+			stalkee_id=results.getInt("user_id");
 			//get the profile
-			results = stmt.executeQuery("select stalkers from users where user_id="+user_id);
+			results = stmt.executeQuery("select stalkers from users where user_id="+stalkee_id);
 			if(results.next()){
 				popularity = Tools.Log2(2.0+(results.getInt("stalkers")+1));
 				//increment the stalkers and update the user popularity
 				stmt.executeUpdate("update users set stalkers="+(results.getInt("stalkers")+1)
-						+ " popularity="+popularity
-						+"where user_id="+user_id);
+						+ ", popularity="+popularity
+						+"where user_id="+stalkee_id);
 			}
 			//make the relationship to the stalker table
-			stmt.executeUpdate("insert into stalker(stalker,stalkee) values("+current_user+", "+user_id+")");
+			stmt.executeUpdate("insert into stalker(stalker,stalkee) values("+stalker+", "+stalkee+")");
 			//get all the users posts
-			results = stmt.executeQuery("select mid,times_republished from posts where owner="+user_id);
+			results = stmt.executeQuery("select mid,times_republished from posts where owner="+stalkee_id);
 			while(results.next()){
 				//for each post by the user, update popularity
 				stmt.executeUpdate("update posts set popularity="+(Tools.Log2(2.0+results.getInt("times_republished"))*popularity)
 						+"where mid="+results.getInt("mid"));
 			}
-			
+			//add the new stalkee to the stalkee list in teh session
+			stalkee_list = session.getAttribute("stalkee_list").toString();
+			if(stalkee_list!=null&&stalkee_list.length()>0){
+				stalkee_list = new StringBuilder().append(",").append(stalkee).toString();
+			}else{
+				stalkee_list = stalkee;
+			}
+			session.setAttribute("stalkee_list", stalkee_list);
 			
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
