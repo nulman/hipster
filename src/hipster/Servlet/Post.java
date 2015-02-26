@@ -17,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class Post
@@ -62,7 +63,7 @@ public class Post extends HttpServlet {
 		ResultSet results = null;
 		ResultSet owner =null;
 		ResultSet topic = null;
-		
+		HttpSession session = request.getSession();
 		//check if we got a reply_to
 		temp = request.getParameter("reply_to");
 		if(temp!=null && temp.length()>0){
@@ -78,7 +79,7 @@ public class Post extends HttpServlet {
 			//establish a database connection
 			conn = Tools.getConnection();
 			//get user #id (using the cookie username)
-			Cookie[] cookies = request.getCookies();
+			/*Cookie[] cookies = request.getCookies();
 		    if(cookies !=null){
 			    for(Cookie cookie : cookies){
 			    	//out.println(cookie.getName());
@@ -89,7 +90,9 @@ public class Post extends HttpServlet {
 		        }
 		    }else{
 		    	//error, no cookies! (it should be impossible to reach this state unless the filter is off)
-		    }
+		    }*/
+			//get user_id from the current session
+			uid=Integer.parseInt(session.getAttribute("user_id").toString());
 		    try{
 		    	// we will need at least one sql statement
 		    	stmt = conn.createStatement();

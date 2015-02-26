@@ -85,7 +85,8 @@ public class Follow extends HttpServlet {
 						+"where user_id="+stalkee_id);
 			}
 			//make the relationship to the stalker table
-			stmt.executeUpdate("insert into stalker(stalker,stalkee) values("+stalker+", "+stalkee+")");
+			stmt.executeUpdate("insert into stalker(stalker,stalkee,stalkee_id) values('"+stalker+"', '"+stalkee+"',"
+					+stalkee_id+")");
 			//get all the users posts
 			results = stmt.executeQuery("select mid,times_republished from posts where owner="+stalkee_id);
 			while(results.next()){

@@ -47,9 +47,7 @@ public class AuthFilter implements Filter {
          
         HttpSession session = req.getSession(false);
         if(session!=null){
-        	System.err.println("about to print");
         	System.err.println("++++++++found a session: "+session.getAttribute("username"));
-        	System.err.println("printed");
     		chain.doFilter(request, response);
     		return;
         }

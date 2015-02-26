@@ -17,6 +17,7 @@ import java.sql.ResultSetMetaData;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +25,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.derby.jdbc.ClientDriver;
 
@@ -63,6 +65,14 @@ public class TestServlet extends HttpServlet {
 	    //Context context = null;
 	    //BasicDataSource ds = null;
 	    Connection conn = Tools.getConnection();
+	    HttpSession session = request.getSession();
+	    request.setAttribute("author", "all");
+	    request.setAttribute("sort_by", "time");
+	    RequestDispatcher rd = getServletContext().getRequestDispatcher("/Discover");
+        rd.include(request, response);
+        if(rd != null){
+        	return;
+        }
 		/*try {
 			context = new InitialContext();
 		} catch (NamingException e) {
@@ -102,15 +112,15 @@ public class TestServlet extends HttpServlet {
 	    ResultSet other = null;
 	    ResultSetMetaData rsmd = results.getMetaData();
 	    int numberCols = rsmd.getColumnCount();
-	    Cookie[] cookies = request.getCookies();
-	    if(cookies !=null){
+	    //Cookie[] cookies = request.getCookies();
+	    /*if(cookies !=null){
 		    for(Cookie cookie : cookies)
 	        {
 		    	//out.println(cookie.getName());
 	        	//if(cookie.getName().equals("hipsterUser"))
 	        	//	out.println("cookie name="+cookie.getName()+" cookie value="+cookie.getValue());
 	        }
-	    }
+	    }*/
 	    //gson: results set to json method
 	    //Tools.ResSetToJSONRes(response, results);
 	    //System.err.println("about to sql\n");
@@ -118,7 +128,7 @@ public class TestServlet extends HttpServlet {
 				+"'this is another test  <a href=http://youtu.be/dQw4w9WgXcQ>@hrefs</a>  i dont know what an href looks like'"
 				+", "+42+")");*/
 	    //System.err.println("post sql\n");
-	    System.err.println(request.getContextPath());
+	    /*System.err.println(request.getContextPath());
 	    response.sendRedirect("/Hipster/LoginSuccess.jsp");
 	    results = stmt.executeQuery("select * from posts inner join mentions on mentions.mentioner=posts.mid where posts.mid=502");
 	    ResultSetMetaData meta = results.getMetaData();
@@ -128,9 +138,9 @@ public class TestServlet extends HttpServlet {
 	         System.err.print(meta.getColumnLabel(i)+" : ");
 	         System.err.println(results.getString(i));
 	       }
-	    }
+	    }*/
 	    //Tools.ResSetToJSONRes(response, results);
-	    other = statement.executeQuery("select description,stalkers,popularity,username,nickname, pic, user_id from users where user_id=4");
+	    //other = statement.executeQuery("select description,stalkers,popularity,username,nickname, pic, user_id from users where user_id=4");
 	    //Tools.ResSetToJSONRes(response, results);
 				/*int n =1;
 				ResultSetMetaData meta = null;

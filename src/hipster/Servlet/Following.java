@@ -1,6 +1,12 @@
 package hipster.Servlet;
 
+import internals.Tools;
+
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,10 +42,22 @@ public class Following extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//extract name
-		//establish a db conenction
-		//query entire list of people name follows
-		//close connection and return names
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet results = null;
+		
+		try{
+			conn = Tools.getConnection();
+			stmt = conn.createStatement();
+			
+			results = stmt.executeQuery("select stalker.stalkee from stalker join users on "
+					+"stalker.stalkee=users.nickname where stalker.stalker='"
+			+request.getAttribute("nickname").toString()+"' order by users.popularity desc fetch first 10 rows only");
+			Tools.ResSetToJSONRes(response, results);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 }
