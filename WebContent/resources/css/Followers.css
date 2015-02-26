@@ -1,52 +1,9 @@
 @import url("main.css");
 
-.row {
-    background-color:rgba(238, 226, 219, 0.4);
-    border-right-style: solid;
-    border-left-style: solid;
-    border-width: thick;
-    border-color: #333333;
-    padding-bottom: 100%;
-    margin-bottom: -100%;
-    overflow: hidden;
 
-}
-
-textarea{
-	width: 100%;
-	
-}
-
-.users,.panel{
-	background-color:rgba(238, 226, 219, 0.7);
-    border: solid;
-    border-color: #333333;
-    padding: 2%;
-    margin-top: 20px;
-    border-radius: 5px;
-    //box-shadow:inset 0px 0px 0px 5px #333333;
-}
-
-.avatar,.favatar{
-	
-	 width: 50px;
-	 border: 1px solid;
-	 border-color: #333333;
-	 border-radius: 5px;
-	 vertical-align:bottom;
-	 filter: sepia(100%);
-}
-
-#mainavatar{
-	width: 150px;
-	display: block;
-	margin-left: auto;
-    margin-right: auto;
-}
-
-
-#follow{
+#Ffollow{
 	float: right;
-	margin-top: auto 5px;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
