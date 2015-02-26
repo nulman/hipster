@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html data-ng-app="">
+<head>
+  <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="angular.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/Followers.css">
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  
+  
+<script>
+function getJSON()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("POST","UserPage.java",true);
+xmlhttp.send();
+}
+</script>
+  
+<script src="resources/javascript/followers.js"></script>
+</head>
+
+<body onload="func();">
+
+<div class="container">
+
+		<div class="row">	
+			<div class="col-sm-4">
+				
+				<div class="panel" id="userdetails">
+					<h1 class="nickname" id="nickname">Nickname</h1><br><h1 class="username"> @username </h1>
+					<br>
+					<h3 id=rank></h3>
+					<br><br>
+					
+				    <img class="mainavatar" id="mainavatar" src="resources/images/defaultuserimg2.png">
+					
+				        <p>
+				        	<br>
+				            With <span id="followers">100</span><a href="" id="followersurl">  Followers </a>,   
+				            <br>
+				            <a href="" id="followingurl">Following </a><span id="following">100</span> other Hipsters.
+				            <br><br>
+				            
+				            <span id="description"></span>
+				            
+				        </p>
+				</div>
+			</div>
+
+			<div class="col-sm-8 " id="followerslist">
+			<br><br>
+			<h1> Following:</h1>
+			<br><br>
+				<div class="Fusers" id="Fusers">
+				  
+				  <img class="Favatar" src="resources/images/defaultuserimg2.png" align="bottom">
+				  <h3 class="Fusername" id="Fusername"></h3>
+		
+				  <a href="" class="btn btn" class= "Ffollow" id="Ffollow"><span class="glyphicon glyphicon-plus"> Follow</span></a>
+	
+				  
+				</div>
+		
+			</div>	
+		</div>
+</div>
+
+
+</body>
+</html>

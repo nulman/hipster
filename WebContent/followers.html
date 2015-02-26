@@ -9,7 +9,7 @@
   <script type="text/javascript" src="app.js"></script>
   <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
-  <link rel="stylesheet" type="text/css" href = "resources/css/profile.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/Followers.css">
   <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   
@@ -38,8 +38,7 @@ xmlhttp.send();
 }
 </script>
   
-<script src="resources/javascript/profile.js"></script>
-
+<script src="resources/javascript/followers.js"></script>
 </head>
 
 <body onload="func();">
@@ -47,7 +46,7 @@ xmlhttp.send();
 <div class="container">
 
 		<div class="row">
-
+			
 	<!-- header div -->
 		<div class="col-sm-12">
 			<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" id="navbarlogo"></a>
@@ -80,51 +79,20 @@ xmlhttp.send();
 				        
 				</div>
 			</div>
-			
-	<!-- user messages -->
-	
-			<div class="col-sm-8 " id="messagebar">
+	<!-- followers list -->
+			<div class="col-sm-8 " id="followerslist">
 			<br><br>
-			<h1> Previous Posts:</h1>
-			
-			<div class="usermessages" id="usermessages">
-			  
-			  <img class="avatar" src="resources/images/defaultuserimg2.png" align="bottom" alt="avatar">
-			  
-			  <h3><a href="" class="nickname"></a>wrote:</h3>
-			  
-			  <a href="" class="follow" id="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>
-			  <br><br>
-			  
-				  <div class="textcontent">
-				    message content
-				  </div>
+			<h1> Followers:</h1>
+			<br><br>
+				<div class="Fusers" id="Fusers">
 				  
-			  <br>
-			  
-			<!-- reply and republish forms (hidden) -->
-			
-			  <a href="" class="replymessage">Reply</a>
-			  
-			  	<form action="Post" method="post" class="newreply">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
-							<br><br>
-							<button class="btn btn" >Submit</button>
-			  	</form>
-			  <a href="" class="rebuplishmessage">Republish</a>
-			  
-			  	<form action="Post" method="post" class="newrepublish">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
-							<br><br>
-							<button class="btn btn" >Submit</button>
-				</form>
-				
-			  <span class="timestamp">date/time</span>
-			  <br>
-			  
-			</div>
+				  <img class="Favatar" src="resources/images/defaultuserimg2.png" align="bottom">
+				  <h3><a href="" class="Fusername" id="Fusername"></a></h3>
+		
+				  <a href="" class="Ffollow" id="Ffollow"><span class="glyphicon glyphicon-plus"><h3>Follow</h3></span></a>
+	
+				  
+				</div>
 		
 			</div>	
 		</div>

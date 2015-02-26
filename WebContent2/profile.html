@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html data-ng-app="user">
+<head>
+  <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/profile.css">
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="resources/AngularJS/app.js"></script>
+</head>
+
+<body data-ng-controller="UserController as user">
+
+<div class="container">
+
+		<div class="row">
+			<div class="col-sm-12">
+				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo"></a>
+				<h3 class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></h3>
+			</div>
+		
+			<div class="col-sm-4">
+				<div class="userdetails">
+					<h1 class="mainnickname">@{{user.details.NICKNAME}}</h1>
+					<br>
+					<h3 id=rank>Hipster Rank: #{{user.details.USER_ID}}</h3>
+					<br><br>
+					
+				    <img class="mainavatar" data-ng-src="{{user.details.PIC}}" alt="main user avatar">
+					
+				        <p>
+				        	<br>
+				            With <a data-ng-href="/user/{{user.details.NICKNAME}}/followers" >{{user.details.STALKERS}}  Followers </a>,   
+				            <br>
+				            <a data-ng-href="/user/{{user.details.NICKNAME}}/following" >Following {{user.details.STALKEES}}</a> other Hipsters.
+				            <br><br>
+				            
+				            <div class="description">
+				            <b>About Me:</b><br>
+				            <cite>{{user.details.DESCRIPTION}}</cite>
+				            </div>
+				            
+				        </p>
+				        
+				   <a data-ng-href="/users/{{user.messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
+				   <br>
+				</div>
+			</div>
+		
+			<div class="col-sm-8">
+			<br>
+			<h1>Previous Posts:</h1>
+			<br>
+			
+				<div class="usermessages" ng-repeat="messages in user.messages|limitTo:10"> 
+			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
+
+			  		<h3><a data-ng-href="/users/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
+			  		<a data-ng-href="/users/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+			  		<br><br>
+			  		<div class="textcontent" ng-bind-html-unsafe="message.TEXT">
+				  		{{messages.TEXT}}
+				 	</div>
+			 	 <br>
+			 	 
+			 	 <a data-ng-href="" class="replymessage">Reply</a>
+			  
+			  		<form action="Post" method="post" class="newreply">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
+							<input type="hidden" name="reply_to"  value="" />
+							<br><br>
+							<button class="btn btn" >Submit</button>
+			  		</form>
+			  	<a data-ng-href="" class="rebuplishmessage">Republish</a>
+			  
+			  		<form action="Post" method="post" class="newrepublish">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
+							<input type="hidden" name="reply_to"  value="" />
+							<br><br>
+							<button class="btn btn" >Submit</button>
+					</form>
+				
+			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
+			  	<br>
+			 	 
+				</div>
+				
+			</div>	
+		</div>
+</div>
+
+</body>
+</html>

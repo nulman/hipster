@@ -68,7 +68,7 @@ a:hover, a:visited, a:link, a:active
 	 
 }
 
-#mainavatar{
+.mainavatar{
 	width: 150px;
 	display: block;
 	margin-left: auto;
@@ -92,8 +92,13 @@ a:hover, a:visited, a:link, a:active
 	background-color:rgba(70, 60, 50, 0.4);
 }
 
-#userdetails{
+.userdetails{
 	//position: fixed;
+	background-color:rgba(250, 240, 230, 0.8);
+    padding: 2%;
+    margin-top: 20px;
+    border-radius: 0px;
+    max-width: 100%;
 }
 
 
@@ -120,7 +125,7 @@ a:hover, a:visited, a:link, a:active
 	margin-left: 5%;
 }
 
-#logout{
+.logout{
 	float: right;
 	background-color:transparent; 
 }
@@ -130,11 +135,11 @@ a:hover, a:visited, a:link, a:active
 	height: 50px;
 }
 
-#navbarlogo{
+.navbarlogo{
 	max-height:100%;
 }
 
-#follow{
+.follow{
 	float: right;
 }
 
