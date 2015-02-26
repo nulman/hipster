@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html data-ng-app="">
+<head>
+  <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="angular.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/login.css">
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  
+	<script>
+	$(document).ready(function(){
+		$("#OR").mouseenter(function(){
+			$("#text").css("font-size", "455%");
+	    });
+		$("#OR").mouseleave(function(){
+			$("#text").css("font-size", "450%");
+	    });
+	});
+	</script>
+</head>
+
+<body>
+<div class="container">
+		<div class="row">
+		
+		<div class="col-sm-8">
+			<img src="resources/images/hipsterlogo2.png" width=100%>
+		</div>
+		
+		<div class="col-sm-4">
+		
+			<br><br>
+			<div class="panels">
+			<h1 align="center">Login</h1>
+			<br><br>	
+				<form action="LoginServlet" method="post" class="form-horizontal">
+			  		Username:<br>
+					<input type="text" name="username" value="username">
+					<br>
+					Password:<br>
+					<input type="password" name="password" value="password">
+					<br><br>
+		
+				<button class="btn btn" data-ng-disabled="error || incomplete">Submit</button>
+				</form>
+			</div>	
+			
+			<h1 align="center" id="OR">OR</h1>
+			
+			<div class="panels">
+			<h1 align="center">Sign Up</h1>
+			<br><br>	
+				<form action="SignupServlet" method="post" class="form-horizontal" style="align:left" id="signup">
+			  		Username *:<br>
+					<input type="text" name="username" maxlength="10" required>
+					<br>
+					Password *:<br>
+					<input type="password" name="password" maxlength="8" required>
+					<br>
+			  		Nickname *:<br>
+					<input type="text" name="nickname" maxlength="20" required>
+					<br>
+					Image URL:<br>
+					<input type="hidden" name="imgurl" value= "resources/images/defaultuserimg.png">
+					<input type="text" name="imgurl">
+					<br>
+					Short Description:<br>
+					<textarea class="form-control" rows="5" name="description" form="signup" maxlength="140"></textarea>
+					<br>
+		
+				<button class="btn btn" data-ng-disabled="error || incomplete">Submit</button>
+				</form>
+			</div>
+			
+			<br><br>
+			
+		</div>
+		
+		</div>
+		
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+@import 'bootstrap.less';
+@font-face {
+    font-family: Hipster;
+    src: url('../../resources/fonts/AGENCYB.TTF');
+}
+
+body {
+    background-image: url('../../resources/images/hipster-wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.row {
+    background-color:rgba(238, 226, 219, 0.4);
+    border-right-style: solid;
+    border-left-style: solid;
+    border-width: thick;
+    border-color: #333333;
+    padding-bottom: 100%;
+    margin-bottom: -100%;
+    overflow: hidden;
+
+}
+
+.topbanner{
+	background-color:rgba(24, 12, 9, 0.4);
+
+}
+
+textarea{
+	width: 100%;
+	
+}
+
+h1,h2,h3,h4,h5,h6{
+	font-family: Hipster;
+	display: inline;	
+}
+
+a{
+	font-weight: bold;
+	color: #333333;
+}
+a:hover{
+	color: #ffffff;
+}
+
+a:visited{
+	color: #807268;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+
+.img {
+  filter: sepia(50%);
+}
+
+.avatar,.Favatar{
+	
+	 width: 50px;
+	 border: 1px solid;
+	 border-color: #333333;
+	 vertical-align:bottom;
+	 filter: sepia(50%);
+	 
+}
+
+.mainavatar{
+	width: 150px;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+    filter: sepia(50%);
+    border: 1px solid;
+	border-color: #333333;
+}
+
+.Fusers,.panel,.usermessages{
+	background-color:rgba(250, 240, 230, 0.8);
+    padding: 2%;
+    margin-top: 20px;
+    border-radius: 0px;
+    max-width: 100%;
+
+}
+
+.header{
+	//position: fixed;
+	background-color:rgba(70, 60, 50, 0.4);
+}
+
+.userdetails{
+	//position: fixed;
+	background-color:rgba(250, 240, 230, 0.8);
+    padding: 2%;
+    margin-top: 20px;
+    border-radius: 0px;
+    max-width: 100%;
+}
+
+
+.textcontent{
+	border: 1px solid;
+	border-color: white;
+	background-color:rgba(250, 240, 230, 0.8);
+	padding: 7px;
+}
+
+.newpost,.newreply,.newrepublish{
+	display: none;
+}
+
+.timestamp{
+	text-align: right;
+	float:right;
+
+}
+
+
+
+.rebuplishmessage{
+	margin-left: 5%;
+}
+
+.logout{
+	float: right;
+	background-color:transparent; 
+}
+
+.navbar-default,.col-sm-12{
+	background-color:rgba(70, 60, 50, 0.4);
+	height: 50px;
+}
+
+.navbarlogo{
+	max-height:100%;
+}
+
+.follow{
+	float: right;
+}
+
+
+
+
+
+
+
