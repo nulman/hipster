@@ -1,9 +1,11 @@
 (function(){
 	var app = angular.module('user', [ ]);
 
-	
+	/*
 	app.controller('UserController',['$http', function($http){
-		this.messages= message;
+		this.messages= messages;
+		this.details=details;
+		
 		var user= this;
 		user.details=[];
 		
@@ -11,7 +13,25 @@
 			user.details= data;
 		});
 	}]);
+	*/
 	
+	app.controller('UserController',function(){
+		this.messages= messages;
+		this.details= details[0];
+
+	});
+	
+	app.controller('FollowersController',function(){
+		this.followers= followers;
+		this.details= details[0];
+	
+	});
+	
+	app.controller('FollowingController',function(){
+		this.following= followers;
+		this.details= details[0];
+	
+	});
 	
 	app.filter('timeago', function() {
 		  return function(stamp) {
@@ -42,7 +62,7 @@
 	
 	
 	var details= [{"DESCRIPTION":"woohoo","STALKERS":"0","POPULARITY":"1.0","USERNAME":"Barry","NICKNAME":"otherBarry","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg","USER_ID":"3"}];
-	var message= [{"OWNER":"1","MID":"1004","STAMP":"2015-02-24 17:53:36.428","REPLYTO":"0","TIMES_REPUBLISHED":"2","POPULARITY":"2.0","REPUBLISH_OF":"0","TEXT":"testing @nick @steve @test #stuff gdfgdfg","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
+	var messages= [{"OWNER":"1","MID":"1004","STAMP":"2015-02-24 17:53:36.428","REPLYTO":"0","TIMES_REPUBLISHED":"2","POPULARITY":"2.0","REPUBLISH_OF":"0","TEXT":"testing @nick @steve @test #stuff gdfgdfg","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
 	              {"OWNER":"1","MID":"1101","STAMP":"2015-02-24 17:56:00.535","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"1.5849625007211563","REPUBLISH_OF":"1004","TEXT":"testing @nick @steve @test #stuff gdfgdfg","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
 	              {"OWNER":"1","MID":"1102","STAMP":"2015-02-24 17:57:12.655","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"1.5849625007211563","REPUBLISH_OF":"1004","TEXT":"testing @nick @steve @test #stuff gdfgdfg","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
 	              {"OWNER":"1","MID":"1201","STAMP":"2015-02-24 21:12:27.744","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"1.5849625007211563","REPUBLISH_OF":"0","TEXT":"@this @test #that something something #what? @user","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
@@ -50,10 +70,13 @@
 	              {"OWNER":"1","MID":"1401","STAMP":"2015-02-26 19:06:03.546","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"1.5849625007211563","REPUBLISH_OF":"0","TEXT":"blah blah blah","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
 	              {"OWNER":"1","MID":"1402","STAMP":"2015-02-26 19:06:19.456","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"1.5849625007211563","REPUBLISH_OF":"0","TEXT":"yada yada yada","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"},
 	              {"OWNER":"1","MID":"1403","STAMP":"2015-02-26 19:06:25.368","REPLYTO":"0","TIMES_REPUBLISHED":"0","POPULARITY":"1.5849625007211563","REPUBLISH_OF":"0","TEXT":"tractor story","NICKNAME":"test","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg"}]
+	var followers= [{"DESCRIPTION":"woohoo","STALKERS":"0","POPULARITY":"1.0","USERNAME":"Barry","NICKNAME":"otherBarry","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg","USER_ID":"3"},{"DESCRIPTION":"woohoo","STALKERS":"0","POPULARITY":"1.0","USERNAME":"Barry","NICKNAME":"notBarry","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg","USER_ID":"4"}];
+	
 	$(document).ready(function(){
 		$(".replymessage").click(function(e){
         	e.preventDefault();
         	$(this).next('.newreply').toggle("slow");
+        	$('.rebuplishmessage').toggle();
         	
         });
     });
@@ -66,6 +89,12 @@
         });
 
     });
+    
+
+	
+	
+    
+    
 	
 	
 })();

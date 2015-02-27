@@ -18,7 +18,8 @@ body {
     border-color: #333333;
     padding-bottom: 100%;
     margin-bottom: -100%;
-    overflow: hidden;
+    overflow-y: hidden;
+    
 
 }
 
@@ -78,7 +79,7 @@ a:hover, a:visited, a:link, a:active
 	border-color: #333333;
 }
 
-.Fusers,.panel,.usermessages{
+.followers,.following,.panel,.usermessages{
 	background-color:rgba(250, 240, 230, 0.8);
     padding: 2%;
     margin-top: 20px;
@@ -109,7 +110,7 @@ a:hover, a:visited, a:link, a:active
 	padding: 7px;
 }
 
-.newpost,.newreply,.newrepublish{
+.newreply,.newrepublish{
 	display: none;
 }
 
@@ -130,10 +131,6 @@ a:hover, a:visited, a:link, a:active
 	background-color:transparent; 
 }
 
-.navbar-default,.col-sm-12{
-	background-color:rgba(70, 60, 50, 0.4);
-	height: 50px;
-}
 
 .navbarlogo{
 	max-height:100%;
@@ -141,7 +138,9 @@ a:hover, a:visited, a:link, a:active
 
 .follow{
 	float: right;
+	vertical-align: middle;
 }
+
 
 
 
