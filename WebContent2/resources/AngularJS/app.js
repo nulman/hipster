@@ -1,5 +1,5 @@
 (function(){
-	var app = angular.module('user', [ ]);
+	var app = angular.module('user', [ 'ngSanitize']);
 
 	/*
 	app.controller('UserController',['$http', function($http){
@@ -89,13 +89,7 @@
         });
 
     });
-    
 
-	
-	
-    
-    
-	
 	
 })();
 	

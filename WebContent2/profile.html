@@ -11,6 +11,7 @@
   <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script type="text/javascript" src="resources/AngularJS/app.js"></script>
+  <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
 </head>
 
 <body data-ng-controller="UserController as user">
@@ -19,7 +20,8 @@
 
 		<div class="row">
 			<div class="col-sm-12">
-				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo"></a>
+				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
+				<h3 class="navbar-text"><a href="#" class="navbar-link">Discover</a></h3>
 				<h3 class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></h3>
 			</div>
 		
@@ -62,7 +64,8 @@
 			  		<h3><a data-ng-href="/users/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
 			  		<a data-ng-href="/users/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
 			  		<br><br>
-			  		<div class="textcontent" ng-bind-html="thisCanBeusedInsideNgBindHtml">
+			  		<div class="textcontent" >
+			  			<span ng-bind-html="messages.TEXT"></span>
 				  		{{messages.TEXT}}
 				 	</div>
 			 	 <br>
