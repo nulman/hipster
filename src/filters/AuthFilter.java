@@ -45,8 +45,13 @@ public class AuthFilter implements Filter {
         String uri = req.getRequestURI();
         System.err.println("*******in filter: "+uri.toString());
          
-        //HttpSession session = req.getSession(false);
-        Cookie[] cookies = req.getCookies();
+        HttpSession session = req.getSession(false);
+        if(session!=null){
+        	System.err.println("++++++++found a session: "+session.getAttribute("username"));
+    		chain.doFilter(request, response);
+    		return;
+        }
+        /*Cookie[] cookies = req.getCookies();
 	    if(cookies !=null){
 		    for(Cookie cookie : cookies)
 	        {
@@ -57,12 +62,12 @@ public class AuthFilter implements Filter {
 	        		return;
 	        	}
 	        }
-	    }
+	    }*/
 	    System.err.println("------+no cookie: "+uri.toString());
-	    if(uri.contains(".html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet") 
+	    if(uri.endsWith("login.html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet") 
 	    		|| uri.endsWith("angular.min.js") || uri.endsWith(".css") || uri.contains("/resources/") 
 	    		|| uri.endsWith("app.js") || uri.endsWith("SignupServlet")){
-	    	System.err.println("------++:static page or login/signup sevrlet: "+uri.toString());
+	    	System.err.println("------++:no session: "+uri.toString());
 	    	chain.doFilter(request, response);
 	    	return;
 	    }else{
