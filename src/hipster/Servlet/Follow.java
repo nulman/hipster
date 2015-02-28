@@ -53,6 +53,7 @@ public class Follow extends HttpServlet {
 		String stalker = session.getAttribute("nickname").toString();
 		String stalkee_list = null;
 		int stalkee_id = 0;
+		int curr_user_id = Integer.parseInt(session.getAttribute("user_id").toString());
 		
 		stalkee = request.getParameter("nickname");
 		if(stalkee==null){
@@ -74,7 +75,12 @@ public class Follow extends HttpServlet {
 				//no such user
 				return;
 			}
+			//increment the amount of people the user is following
 			stalkee_id=results.getInt("user_id");
+			results = stmt.executeQuery("select stalkees from users where user_id="+curr_user_id);
+			if(results.next()){
+				stmt.executeUpdate("update users set stalkees="+(results.getInt("stalkees")+1) +"where ");
+			}
 			//get the profile
 			results = stmt.executeQuery("select stalkers from users where user_id="+stalkee_id);
 			if(results.next()){
@@ -84,7 +90,7 @@ public class Follow extends HttpServlet {
 						+ ", popularity="+popularity
 						+"where user_id="+stalkee_id);
 			}
-			//make the relationship to the stalker table
+			//make the relationship in the stalker table
 			stmt.executeUpdate("insert into stalker(stalker,stalkee,stalkee_id) values('"+stalker+"', '"+stalkee+"',"
 					+stalkee_id+")");
 			//get all the users posts

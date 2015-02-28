@@ -85,7 +85,7 @@ public class SignUp extends HttpServlet {
 				}
 			}
 			conn.close();
-			rd = getServletContext().getRequestDispatcher("/login.html?dude=\"what\"");
+			rd = getServletContext().getRequestDispatcher("/login.html");
             rd.include(request, response);
             //response.sendRedirect("/Hipster/login.html?msg=\"something something\"");
             out.close();
