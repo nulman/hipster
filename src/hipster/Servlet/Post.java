@@ -38,7 +38,8 @@ public class Post extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//cant GET this service
+		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
 	/**
@@ -64,17 +65,19 @@ public class Post extends HttpServlet {
 		ResultSet owner =null;
 		ResultSet topic = null;
 		HttpSession session = request.getSession();
+		String  [] req_par = Tools.RequestToString(request).split(",");
 		//check if we got a reply_to
-		temp = request.getParameter("reply_to");
+		temp = req_par[0];
 		if(temp!=null && temp.length()>0){
 			reply_to=Integer.parseInt(temp);
 		}
 		//probably "fix" text by replacing %20 with spaces if that happens in post
 		//check length of text<=140
-		text=request.getParameter("text");
+		text=req_par[2];
 		if(text.length()>140){
 			//if its too long craft an error response
-			return;
+			 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	    		return;
 		}
 			//establish a database connection
 			conn = Tools.getConnection();
@@ -104,7 +107,7 @@ public class Post extends HttpServlet {
 				popularity = owner.getDouble("popularity");
 	System.err.println("0");
 				//check if this is a republish
-				temp = request.getParameter("republish");
+				temp = req_par[1];
 	System.err.println("0.4");
 				if(temp!=null && temp.length()>0){
 	System.err.println("0.5");
@@ -135,6 +138,8 @@ public class Post extends HttpServlet {
 					owner = stmt2.executeQuery("select STALKERS from USERS where USER_ID="+results.getInt("OWNER"));
 					if(!owner.next()){
 						//sql error
+						 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			    		return;
 					}
 					//update the republish count and popularity of the post we are republishing
 					stmt3.executeUpdate("UPDATE POSTS SET TIMES_REPUBLISHED="+(results.getInt("TIMES_REPUBLISHED")+1)
@@ -150,7 +155,8 @@ public class Post extends HttpServlet {
 	System.err.println("0.73");
 					if(!results.next()){
 						//failed to get auto generated keys, this shouldnt happen
-						return;
+						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				    	return;			
 					}
 					mid=results.getInt(1);
 	System.err.println("0.74");
@@ -165,13 +171,15 @@ public class Post extends HttpServlet {
 					//add all the mentions from the original publish to this republish
 					results = stmt.executeQuery("select mentionee from mentions where mentioner="+republish_id);
 					while(results.next()){
-					stmt2.executeUpdate("insert into mentions(mentioner,mentionee) values("+mid+",'"+results.getString("mentionee")+"')");
+						stmt2.executeUpdate("insert into mentions(mentioner,mentionee) values("+mid+",'"+results.getString("mentionee")+"')");
 					}
 	System.err.println("0.76");
 					
 					
 		    }else{
 		    	//we failed to retrieve the republished post, should only happen on a db error or by a smartass user
+		    	 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		    		return;
 		    }
 		}else{
 			//normal publish or reply
@@ -223,6 +231,7 @@ public class Post extends HttpServlet {
 			System.err.println("2.5");
 		       if (!results.next()) {
 		    		//failed to get mid
+		    	   response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		    		return;
 		    	}
 		       mid = results.getInt(1);
@@ -235,10 +244,18 @@ public class Post extends HttpServlet {
 			}
 			System.err.println();
 			System.err.println("4");
+			
 				
 			System.err.println();
 			System.err.println("5");
 		}
+				//returns the newly creates post
+				Tools.ResSetToJSONRes(response, stmt.executeQuery("select * from posts where mid="+mid));
+				stmt.close();
+				stmt2.close();
+				stmt3.close();
+				conn.close();
+				
 		    }catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

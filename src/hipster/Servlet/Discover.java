@@ -2,6 +2,7 @@ package hipster.Servlet;
 
 import internals.Tools;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,14 +38,11 @@ public class Discover extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated stub
-		request.setAttribute("author", "test");
+		/*request.setAttribute("author", "test");
 		request.setAttribute("sort_by", "time");
 		System.err.println("in discover GET. got author:sort_by "+(String)request.getAttribute("author")
-				+":"+(String)request.getAttribute("sort_by"));
+				+":"+(String)request.getAttribute("sort_by"));*/
 		RequestDispatcher rd = request.getRequestDispatcher("/LoginSuccess.jsp");
-        
-        
-		doPost(request,response);
 		rd.include(request, response);
 		
 	}
@@ -62,13 +60,20 @@ public class Discover extends HttpServlet {
 		String sort_by = null;
 		
 		//check what we need to return
-		author = (String)request.getAttribute("author");
-		sort_by = (String)request.getAttribute("sort_by");
+		//author = (String)request.getAttribute("author");
+		//sort_by = (String)request.getAttribute("sort_by");
+
+		
+	      String [] temp = Tools.RequestToString(request).split(",");
+	      author=temp[0];
+	      sort_by= temp[1];
+
+		
 	System.err.println("in discover. got author:sort_by "+author+":"+sort_by);
 		try{
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
-			//what is are teh posts sorted by?
+			//what are the posts sorted by?
 			if(sort_by.equals("popularity")){
 				sort_by = "popularity";
 			}else{

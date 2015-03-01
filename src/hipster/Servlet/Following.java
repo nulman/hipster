@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Following
  */
-@WebServlet("/following/*")
+@WebServlet({"/following","/following/*"})
 public class Following extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -32,10 +32,27 @@ public class Following extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//extract name
-		//establish a db connection
-		//query to check if name exists and to gets its #id
-		//query 10 posts from people name follows ordered by popularity
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet results = null;
+		String nickname = null;
+		String [] temp = request.getRequestURI().split("/");	
+		nickname=temp[temp.length-1];
+		try{
+			conn = Tools.getConnection();
+			stmt = conn.createStatement();
+			System.err.println("nickname="+nickname);
+			results = stmt.executeQuery("select user_id from users where nickname='"
+					+nickname+"'");
+			System.err.println("query successfull");
+			if(results.next()){
+				response.sendRedirect("/Hipster/profile.html?nickname=\""+nickname+"\"");
+			}else{
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -52,7 +69,7 @@ public class Following extends HttpServlet {
 			
 			results = stmt.executeQuery("select stalker.stalkee from stalker join users on "
 					+"stalker.stalkee=users.nickname where stalker.stalker='"
-			+request.getAttribute("nickname").toString()+"' order by users.popularity desc fetch first 10 rows only");
+			+Tools.RequestToString(request)+"' order by users.popularity desc fetch first 10 rows only");
 			Tools.ResSetToJSONRes(response, results);
 			
 		}catch(Exception e){

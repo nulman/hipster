@@ -34,7 +34,7 @@ public class Follow extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Follow extends HttpServlet {
 		int stalkee_id = 0;
 		int curr_user_id = Integer.parseInt(session.getAttribute("user_id").toString());
 		
-		stalkee = request.getParameter("nickname");
+		stalkee = Tools.RequestToString(request);
 		if(stalkee==null){
 			//bad request!
 			return;

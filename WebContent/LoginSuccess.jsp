@@ -8,26 +8,17 @@
 </head>
 <body>
 <%
-//allow access only if session exists
-String user = (String) session.getAttribute("username");
-int id =  Integer.parseInt(session.getAttribute("user_id").toString());
 String userName = null;
-String sessionID = null;
 Cookie[] cookies = request.getCookies();
 if(cookies !=null){
 for(Cookie cookie : cookies){
-    if(cookie.getName().equals("username")) userName = cookie.getValue();
-    if(cookie.getName().equals("JSESSIONID")) sessionID = cookie.getValue();
+    if(cookie.getName().equals("hipsterUser")) userName = cookie.getValue();
 }
 }
+if(userName == null) response.sendRedirect("login.html");
 %>
-<h3>Hi <%=userName %>, Login successful. Your Session ID=<%=sessionID %></h3>
+<h3>Hi <%=userName %>, Login successful.</h3>
 <br>
-User=<%=user %>
-<br>
-Id=<%=id %>
-<br>
-<a href="CheckoutPage.jsp">Checkout Page</a>
 <form action="LogoutServlet" method="post">
 <input type="submit" value="Logout" >
 </form>

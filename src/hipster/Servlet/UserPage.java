@@ -2,10 +2,12 @@ package hipster.Servlet;
 
 import internals.Tools;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,9 +50,11 @@ public class UserPage extends HttpServlet {
 					+nickname+"'");
 			System.err.println("query successfull");
 			if(results.next()){
-				rd = getServletContext().getRequestDispatcher("/profile.html?nickname=\""+nickname+"\"");
+				//rd = getServletContext().getRequestDispatcher("/profile.html?nickname=\""+nickname+"\"");
 	            //rd.include(request, response);
 				response.sendRedirect("/Hipster/profile.html?nickname=\""+nickname+"\"");
+			}else{
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}
 			
 		}catch(Exception e){
@@ -69,9 +73,8 @@ public class UserPage extends HttpServlet {
 		try{
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
-			System.err.println("user page doPost nickname="+request.getAttribute("nickname"));
-			results = stmt.executeQuery("select nickname,pic,user_id,description,stalkers,stalkees from users where nickname="
-					+request.getAttribute("nickname"));
+			results = stmt.executeQuery("select nickname,pic,user_id,description,stalkers,stalkees from users where nickname='"
+					+Tools.RequestToString(request)+"'");
 			Tools.ResSetToJSONRes(response, results);
 			
 		}catch(Exception e){

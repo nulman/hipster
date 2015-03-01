@@ -1,103 +1,69 @@
 <!DOCTYPE html>
-<html data-ng-app="">
+<html data-ng-app="user">
 <head>
   <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
   <meta charset="utf-8">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="angular.min.js"></script>
-  <script type="text/javascript" src="app.js"></script>
   <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href = "resources/css/main.css">
-  <link rel="stylesheet" type="text/css" href = "resources/css/Followers.css">
+  <link rel="stylesheet" type="text/css" href = "resources/css/profile.css">
   <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  
-  
-<script>
-function getJSON()
-{
-var xmlhttp;
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("POST","UserPage.java",true);
-xmlhttp.send();
-}
-</script>
-  
-<script src="resources/javascript/followers.js"></script>
+  <script type="text/javascript" src="resources/AngularJS/app.js"></script>
+  <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
 </head>
 
-<body onload="func();">
+<body data-ng-controller="UserController as user">
 
 <div class="container">
 
 		<div class="row">
-			
-	<!-- header div -->
-		<div class="col-sm-12">
-			<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" id="navbarlogo"></a>
-			<h3 class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></h3>
-		</div>
 		
-	<!-- user details -->	
-			<div class="col-sm-4">
-				
-				<div class="panel" id="userdetails">
-					<h1 class="mainnickname" id="mainnickname">Nickname</h1><br><h1 class="username" id="mainusername"> @username </h1>
+			<div class="col-sm-3">
+				<div class="userdetails">
+					<a href="/users/{{user.details.NICKNAME}}" class="mainnickname"><h1>@{{user.details.NICKNAME}}</h1></a>
 					<br>
-					<h3 id=rank></h3>
+					<h3 id=rank>Hipster Rank: #{{user.details.USER_ID}}</h3>
 					<br><br>
 					
-				    <img class="mainavatar" id="mainavatar" src="resources/images/defaultuserimg2.png" alt="main user avatar">
+				    <img class="mainavatar" data-ng-src="{{user.details.PIC}}" alt="main user avatar">
 					
 				        <p>
 				        	<br>
-				            With <span id="followers">100</span><a href="" id="followersurl">  Followers </a>,   
+				            With <a data-ng-href="/user/{{user.details.NICKNAME}}/followers" >{{user.details.STALKERS}}  Followers </a>,   
 				            <br>
-				            <a href="" id="followingurl">Following </a><span id="following">100</span> other Hipsters.
+				            <a data-ng-href="/user/{{user.details.NICKNAME}}/following" >Following {{user.details.STALKEES}}</a> other Hipsters.
 				            <br><br>
 				            
-				            <span id="description"></span>
+				            <div class="description">
+				            <b>About Me:</b><br>
+				            <cite>{{user.details.DESCRIPTION}}</cite>
+				            </div>
 				            
 				        </p>
 				        
-				   <a href="" id="Ufollow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
-				        
+				   <a data-ng-href="/users/{{user.messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
+				   <br>
 				</div>
 			</div>
-	<!-- followers list -->
-			<div class="col-sm-8 " id="followerslist">
-			<br><br>
-			<h1> Followers:</h1>
-			<br><br>
-				<div class="Fusers" id="Fusers">
-				  
-				  <img class="Favatar" src="resources/images/defaultuserimg2.png" align="bottom">
-				  <h3><a href="" class="Fusername" id="Fusername"></a></h3>
 		
-				  <a href="" class="Ffollow" id="Ffollow"><span class="glyphicon glyphicon-plus"><h3>Follow</h3></span></a>
-	
-				  
+			<div class="col-sm-8" data-ng-controller="FollowersController as follower">
+			<br>
+			<h1>Followers:</h1>
+			<br>
+			
+				<div class="followers"  ng-repeat="followers in follower.followers|limitTo:10"> 
+			  		
+			  		<img class="avatar" data-ng-src="{{followers.PIC}}" align="bottom" alt="avatar">
+			  		<h3><a data-ng-href="/users/{{followers.NICKNAME}}" class="nickname">@{{followers.NICKNAME}}</a></h3>
+			  		<a data-ng-href="/users/{{followers.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+
 				</div>
-		
+				
 			</div>	
 		</div>
 </div>
-
 
 </body>
 </html>

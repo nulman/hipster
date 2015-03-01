@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class Followers
  */
-@WebServlet("/followers")
+@WebServlet({"/followers", "/followers/*"})
 public class Followers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,12 +34,27 @@ public class Followers extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// extract name
-		//establish a db connection
-		//query for name and his #id
-		//query list of top 10 followers by popularity
-		//close connection
-		//craft response
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet results = null;
+		String nickname = null;
+		String [] temp = request.getRequestURI().split("/");	
+		nickname=temp[temp.length-1];
+		try{
+			conn = Tools.getConnection();
+			stmt = conn.createStatement();
+			System.err.println("nickname="+nickname);
+			results = stmt.executeQuery("select user_id from users where nickname='"
+					+nickname+"'");
+			System.err.println("query successfull");
+			if(results.next()){
+				response.sendRedirect("/Hipster/profile.html?nickname=\""+nickname+"\"");
+			}else{
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -56,7 +72,7 @@ public class Followers extends HttpServlet {
 			
 			results = stmt.executeQuery("select stalker.stalker from stalker join users on "
 					+"stalker.stalker=users.nickname where stalker.stalkee='"
-			+request.getAttribute("nickname").toString()+"' order by users.popularity desc fetch first 10 rows only");
+			+Tools.RequestToString(request)+"' order by users.popularity desc fetch first 10 rows only");
 			Tools.ResSetToJSONRes(response, results);
 			
 		}catch(Exception e){

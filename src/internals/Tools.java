@@ -3,6 +3,7 @@
  */
 package internals;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
@@ -81,6 +83,25 @@ public class Tools {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static String RequestToString(HttpServletRequest request){
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader;
+		try {
+			reader = request.getReader();
+			String line = null;
+		      while ((line = reader.readLine()) != null)
+		      {
+		        sb.append(line);
+		      }
+		     
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 return sb.toString();
+	      
 	}
 
 }

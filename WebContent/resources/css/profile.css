@@ -1,5 +1,35 @@
 @import url("main.css");
 
+.followers,.following,.panel,.usermessages,.userdetails{
+	background-color:rgba(250, 240, 230, 0.8);
+    padding: 2%;
+    margin-top: 20px;
+    border-radius: 0px;
+    max-width: 100%;
+
+}
+
+
+.logout{
+	float: right;
+	background-color:transparent; 
+}
+
+
+.navbarlogo{
+	max-height:50px;
+}
+
+.follow{
+	float: right;
+	vertical-align: middle;
+}
+
+.col-sm-12{
+	background-color: rgba(70, 60, 50, 0.4); 
+}
+
+
 
 
 
