@@ -1,49 +1,104 @@
+function getName(VarSearch) {
+
+	 var url = window.location.search.substring(1);
+	    var VariableArray = url.split('&');
+	    for(var i = 0; i < VariableArray.length; i++){
+	        var KeyValuePair = VariableArray[i].split('=');
+	        if(KeyValuePair[0] == VarSearch){
+	            return KeyValuePair[1];
+	        }
+	    }	    
+}
+
 (function(){
+	
+//main module
 	var app = angular.module('user', [ 'ngSanitize']);
 	
+	//MainController- used in the Main page- queries for the current user's details and latest 10 posts from users i follow
+	app.controller('MainController',['$http', function($http){	
+
+		var user= this;
+		user.details=[];
+		user.messages=[];
+		
+		//var name= getName("nickname");
+		var name= 'nick';
+		
+		$http.post('user',name).success(function(data){
+			user.details= data[0];
+		});
+		
+		$http.post('Discover','stalkee,latest').success(function(data){
+			user.messages= data;
+		});
+		
+	}]);
 	
+	//DiscoverController- used in the Discover page- queries for the top 10 posts of all users
+	app.controller('DiscoverController',['$http', function($http){	
+
+		var user= this;
+		user.details=[];
+		user.messages=[];
+		
+		//var name= getName("nickname");
+		var name= 'nick';
+		
+		$http.post('user',name).success(function(data){
+			user.details= data[0];
+		});
+		
+		$http.post('Discover','all,popularity').success(function(data){
+			user.messages= data;
+		});
+		
+	}]);
+	
+	//UserController- used in User pages- queries for the user details and latest 10 posts
 	app.controller('UserController',['$http', function($http){	
 
 		var user= this;
 		user.details=[];
 		user.messages=[];
 		
-		$http.post('user','nick').success(function(data){
+		//var name= getName("nickname");
+		var name= 'nick';
+		
+		$http.post('user',name).success(function(data){
 			user.details= data[0];
 		});
 		
-		$http.post('Discover','nick,popularity').success(function(data){
+		$http.post('Discover','nick,latest').success(function(data){
 			user.messages= data;
 		});
 		
 	}]);
-
+	
+	//FollowersController- used in /followers/user pages, queries for the top 10 followers
 	app.controller('FollowersController',function(){
 		var followers= this;
-		followers.details=[];
-		followers.messages=[];
+		followers.followers=[];
 		
-		$http.post('user','nick').success(function(data){
-			followers.details= data[0];
-		});
+		//var name= getName("nickname");
+		var name= 'nick';
 		
-		$http.post('Discover','nick,popularity').success(function(data){
-			followers.messages= data;
+		$http.post('followers',name).success(function(data){
+			followers.followers= data;
 		});
 	
 	});
 	
+	//FollowingController- used in /following/user pages, queries for the top 10 users who User is following
 	app.controller('FollowingController',function(){
-		var followeing= this;
-		followeing.details=[];
-		followeing.messages=[];
+		var following= this;
+		following.following=[];
 		
-		$http.post('user','nick').success(function(data){
-			followeing.details= data[0];
-		});
+		//var name= getName("nickname");
+		var name= 'nick';
 		
-		$http.post('Discover','nick,popularity').success(function(data){
-			followeing.messages= data;
+		$http.post('following',name).success(function(data){
+			following.following= data;
 		});
 	
 	});
@@ -75,25 +130,24 @@
 		  };
 		});
 	
-	var followers= [{"DESCRIPTION":"woohoo","STALKERS":"0","POPULARITY":"1.0","USERNAME":"Barry","NICKNAME":"otherBarry","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg","USER_ID":"3"},{"DESCRIPTION":"woohoo","STALKERS":"0","POPULARITY":"1.0","USERNAME":"Barry","NICKNAME":"notBarry","PIC":"http://assets.sbnation.com/assets/1311490/barry.jpg","USER_ID":"4"}];
-	
 	$(document).ready(function(){
 		$(".replymessage").click(function(e){
-        	e.preventDefault();
-        	$(this).next('.newreply').toggle("slow");
-        	$('.rebuplishmessage').toggle();
-        	
-        });
-    });
- 
-    $(document).ready(function(){
-        $(".rebuplishmessage").click(function(e){
-        	e.preventDefault();
-        	$(this).next('.newrepublish').toggle("slow");
-        	
-        });
+	    	e.preventDefault();
+	    	$(this).next('.newreply').toggle("slow");
+	    	$('.rebuplishmessage').toggle();
+	    	
+	    });
+	});
 
-    });
+	$(document).ready(function(){
+	    $(".rebuplishmessage").click(function(e){
+	    	e.preventDefault();
+	    	$(this).next('.newrepublish').toggle("slow");
+	    	
+	    });
+
+	});
+
 
 	
 })();

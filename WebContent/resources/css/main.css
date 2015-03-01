@@ -62,7 +62,7 @@ a:hover, a:visited, a:link, a:active
   filter: sepia(50%);
 }
 
-.avatar,.Favatar{
+.avatar,.Favatar,.topavatar{
 	
 	 width: 50px;
 	 border: 1px solid;
@@ -70,6 +70,10 @@ a:hover, a:visited, a:link, a:active
 	 vertical-align:bottom;
 	 filter: sepia(50%);
 	 
+}
+
+.topavatar{
+	margin-left: 10%;
 }
 
 .mainavatar{
@@ -146,6 +150,10 @@ a:hover, a:visited, a:link, a:active
 
 .col-sm-12{
 	background-color: rgba(70, 60, 50, 0.4); 
+}
+
+.messagetext{
+	resize:vertical;
 }
 
 
