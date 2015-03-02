@@ -13,6 +13,7 @@ import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +26,9 @@ import org.apache.catalina.core.StandardServer;
 /**
  * Servlet implementation class LoginServlet
  */
+@SuppressWarnings("deprecation")
 @WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -51,7 +53,6 @@ public class LoginServlet extends HttpServlet {
 		String name = null;
 		String pass = null;
 		String pic = null;
-		String stalkee_list = null;
 		HttpSession session = null;
 		int uid =0;
 		Statement stmt = null;
@@ -89,17 +90,7 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("user_id", results.getInt("user_id"));
 				session.setAttribute("nickname", results.getString("nickname"));
 				session.setAttribute("photo", results.getString("pic"));
-				results = stmt.executeQuery("select stalkee from stalker where stalker='"
-				+results.getString("nickname")+"'");
-				if(results.next()){
-					stalkee_list = results.getString("stalkee");
-				}
-				while(results.next()){
-					stalkee_list = new StringBuilder().append(stalkee_list).append(",")
-							.append(results.getString("stalkee")).toString();
-				}
 				
-				session.setAttribute("stalkee_list", stalkee_list);
 				session.setMaxInactiveInterval(60*30);
 
 	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/mainPage.html");

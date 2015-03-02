@@ -132,11 +132,13 @@ function getName(VarSearch) {
 	}]);
 	
 	//ProfileController- used in user profile pages- queries for the user details and latest 10 posts
-	app.controller('ProfileController',['$http', function($http){	
+	app.controller('ProfileController',['$scope','$interval','$http', function($scope,$interval,$http){	
 
 		var profile= this;
 		profile.details=[];
 		profile.messages=[];
+		profile.showreply= [false];
+		profile.showrepublish= [false];
 		
 		var name= getName("nickname");
 		
@@ -150,7 +152,46 @@ function getName(VarSearch) {
 			profile.messages= data;
 		});
 		
+		$scope.refresh= function(){
+			
+			stop= $interval(function(){
+				$http.post('Discover',request).success(function(data){
+					profile.messages= data;
+				});
+			}, 2000);
+		};
+		
+		$scope.pause = function() {
+	          
+	        $interval.cancel(stop);
+	        stop = undefined;
+	           
+	        };
+	        
+	        
+	    $scope.togglereply= function($index){
+	    	if(profile.showreply[$index]==false){
+	    		$scope.pause();
+	    		profile.showreply[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		profile.showreply[$index]=false;
+	    	}
+	    };
+	    
+	    $scope.togglerepublish= function($index){
+	    	if(profile.showrepublish[$index]==false){
+	    		$scope.pause();
+	    		profile.showrepublish[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		profile.showrepublish[$index]=false;
+	    	}
+	    };
+		
+		
 	}]);
+	
 	
 	//FollowersController- used in /followers/user pages, queries for the user's details and the top 10 followers
 	app.controller('FollowersController',function(){
@@ -179,17 +220,58 @@ function getName(VarSearch) {
 	});
 	
 	//TopicController- used in topic pages, queries for the latest 10 messages who contain a specific topic
-	app.controller('TopicController',function(){
+	app.controller('TopicController',['$scope','$interval','$http', function($scope,$interval,$http){	
+
 		var topic= this;
-		topic.topic=[];
+		topic.messages=[];
+		topic.showreply= [false];
+		topic.showrepublish= [false];
 		
-		var topicname= getName("topic");
-		
-		$http.post('Discover','all,latest,0').success(function(data){
-			following.following= data;
+		var topic= getName("topic");
+		var request= "#"+topic;
+
+		$http.post('Topic',request).success(function(data){  //get actual post method
+			topic.messages= data;
 		});
-	
-	});
+		
+		$scope.refresh= function(){
+			
+			stop= $interval(function(){
+			$http.post('Topic',request).success(function(data){//same
+				topic.messages= data;
+			});
+			}, 2000);
+		};
+		
+		$scope.pause = function() {
+	          
+	        $interval.cancel(stop);
+	        stop = undefined;
+	           
+	        };
+	        
+	        
+	    $scope.togglereply= function($index){
+	    	if(topic.showreply[$index]==false){
+	    		$scope.pause();
+	    		topic.showreply[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		topic.showreply[$index]=false;
+	    	}
+	    };
+	    
+	    $scope.togglerepublish= function($index){
+	    	if(topic.showrepublish[$index]==false){
+	    		$scope.pause();
+	    		topic.showrepublish[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		topic.showrepublish[$index]=false;
+	    	}
+	    };
+		
+	}]);
 	
 	
 	//custom filter to display time in 'time ago' format

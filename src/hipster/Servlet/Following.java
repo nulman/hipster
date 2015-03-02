@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Following
  */
+@SuppressWarnings("deprecation")
 @WebServlet({"/following","/following/*"})
-public class Following extends HttpServlet {
+public class Following extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -62,14 +64,19 @@ public class Following extends HttpServlet {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet results = null;
+		String amount = null;
 		
 		try{
+			if(request.getParameter("flag").length()<2){
+				amount = "order by users.popularity desc fetch first 10 rows only";
+			}
+			
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
 			
 			results = stmt.executeQuery("select stalker.stalkee from stalker join users on "
 					+"stalker.stalkee=users.nickname where stalker.stalker='"
-			+Tools.RequestToString(request)+"' order by users.popularity desc fetch first 10 rows only");
+			+Tools.RequestToString(request)+"' "+amount+" ");
 			Tools.ResSetToJSONRes(response, results);
 			stmt.close();
 			conn.close();

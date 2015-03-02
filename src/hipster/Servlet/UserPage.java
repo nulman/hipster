@@ -11,6 +11,7 @@ import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class UserPage
  */
+@SuppressWarnings("deprecation")
 @WebServlet({"/user/*", "/user"})
-public class UserPage extends HttpServlet {
+public class UserPage extends HttpServlet implements SingleThreadModel {
 	private static final long serialVersionUID = 1L;
        
     /**

@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +24,9 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class Post
  */
+@SuppressWarnings("deprecation")
 @WebServlet("/Post")
-public class Post extends HttpServlet {
+public class Post extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -68,10 +70,10 @@ public class Post extends HttpServlet {
 		HttpSession session = request.getSession();
 		//req_par= reply_to,republish_of,text
 		//String  [] req_par = Tools.RequestToString(request).split(",");
-		Enumeration<String> t =	request.getParameterNames();
-		while(t.hasMoreElements()){
-			System.err.println(t.nextElement());
-		}
+//		Enumeration<String> t =	request.getParameterNames();
+//		while(t.hasMoreElements()){
+//			System.err.println(t.nextElement());
+//		}
 		System.err.println("got reply_to:republish:text "+request.getParameter("reply_to")+" "+request.getParameter("republish")
 				+" "+request.getParameter("text"));
 		//check if we got a reply_to
@@ -114,15 +116,20 @@ public class Post extends HttpServlet {
 				popularity = owner.getDouble("popularity");
 	System.err.println("0");
 				//check if this is a republish
-				temp = request.getParameter("republish");;
-				System.err.println("republish = "+temp);
+				//temp = request.getParameter("republish").toString();
+				System.err.println("republish = "+request.getParameter("republish"));
+				
 	System.err.println("0.4");
+	//check if this is a republish
+	temp=request.getParameter("republish");
+	System.err.println("temp(republish) is "+temp);
 				if(temp!=null && temp.length()>0){
+					republish_id= Integer.parseInt(temp);
 	System.err.println("0.5");
-				republish_id=Integer.parseInt(temp);
+				
 				}
-	//republish_id=1004;//delete this line!	
 	System.err.println("0.6 did you delete the linea bove me?(manual alocation of republish_id)");
+				//if this is indeed a republish, handle it
 				if(republish_id>1){
 	System.err.println("0.7");
 			    	//if it is
@@ -156,7 +163,7 @@ public class Post extends HttpServlet {
 	System.err.println("0.72");
 					//republish
 					stmt2.executeUpdate("INSERT INTO POSTS(owner, republish_of, text, popularity) VALUES("+uid+", "
-							+results.getInt("MID")+", '"+results.getString("TEXT")
+							+results.getInt("MID")+", '"+"RE: "+results.getString("TEXT")
 							+"', "+Tools.Log2(2+popularity)+")",returnGeneratedMID);
 					//get the new messege id
 					results=stmt2.getGeneratedKeys();

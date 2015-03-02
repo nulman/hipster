@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,8 @@ import javax.servlet.http.HttpSession;
  * Servlet Filter implementation class AuthFilter
  */
 //@WebFilter("/AuthFilter")
-public class AuthFilter implements Filter {
+@SuppressWarnings("deprecation")
+public class AuthFilter implements Filter,  SingleThreadModel {
 
     /**
      * Default constructor. 

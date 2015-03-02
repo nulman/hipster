@@ -20,6 +20,7 @@ import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -41,8 +42,9 @@ import com.google.gson.stream.JsonWriter;
 /**
  * Servlet implementation class TestServlet
  */
+@SuppressWarnings("deprecation")
 @WebServlet("/TestServlet/*")
-public class TestServlet extends HttpServlet {
+public class TestServlet extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
     /**

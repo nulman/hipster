@@ -143,9 +143,9 @@ a:hover, a:visited, a:link, a:active
 	max-height:50px;
 }
 
-.follow{
+.follow,.timesrepublished{
 	float: right;
-	vertical-align: middle;
+	//vertical-align: middle;
 }
 
 .col-sm-12{
@@ -154,6 +154,11 @@ a:hover, a:visited, a:link, a:active
 
 .messagetext{
 	resize:vertical;
+}
+
+#followbtn{
+	background-color: rgba(70, 60, 50, 0.4); 
+	float:right;
 }
 
 

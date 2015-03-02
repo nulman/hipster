@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +19,9 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class Follow
  */
+@SuppressWarnings("deprecation")
 @WebServlet(urlPatterns = { "/Follow" })
-public class Follow extends HttpServlet {
+public class Follow extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -48,38 +50,47 @@ public class Follow extends HttpServlet {
 		double popularity = 0.0;
 		String stalkee = null;
 		Statement stmt= null;
+		Statement stmt2= null;
 		ResultSet  results = null;
 		HttpSession session = request.getSession(false);
 		String stalker = session.getAttribute("nickname").toString();
-		String stalkee_list = null;
 		int stalkee_id = 0;
 		int curr_user_id = Integer.parseInt(session.getAttribute("user_id").toString());
 		
-		stalkee = Tools.RequestToString(request);
+		stalkee = request.getParameter("nickname");
 		if(stalkee==null){
 			//bad request!
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 
 		try{
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
+			stmt2 = conn.createStatement();
 			//check for duplicate
-			results = stmt.executeQuery("select * from stalker where stalker='"+stalker+"' stalkee='"+stalkee+"')");
+			results = stmt.executeQuery("select * from stalker where stalker='"+stalker+"' and stalkee='"+stalkee+"'");
 			if(results.next()){
 				//this is a duplicate, handle it
+				stmt.close();
+				conn.close();
+				response.sendError(HttpServletResponse.SC_NO_CONTENT);
 				return;
 			}
 			results = stmt.executeQuery("select user_id from users where nickname='"+stalkee+"'");
 			if(!results.next()){
 				//no such user
+				stmt.close();
+				conn.close();
+				response.sendError(HttpServletResponse.SC_NO_CONTENT);
 				return;
 			}
 			//increment the amount of people the user is following
 			stalkee_id=results.getInt("user_id");
 			results = stmt.executeQuery("select stalkees from users where user_id="+curr_user_id);
 			if(results.next()){
-				stmt.executeUpdate("update users set stalkees="+(results.getInt("stalkees")+1) +"where ");
+				stmt2.executeUpdate("update users set stalkees="+(results.getInt("stalkees")+1) +"where user_id="
+			+curr_user_id);
 			}
 			//get the profile
 			results = stmt.executeQuery("select stalkers from users where user_id="+stalkee_id);
@@ -97,17 +108,9 @@ public class Follow extends HttpServlet {
 			results = stmt.executeQuery("select mid,times_republished from posts where owner="+stalkee_id);
 			while(results.next()){
 				//for each post by the user, update popularity
-				stmt.executeUpdate("update posts set popularity="+(Tools.Log2(2.0+results.getInt("times_republished"))*popularity)
+				stmt2.executeUpdate("update posts set popularity="+(Tools.Log2(2.0+results.getInt("times_republished"))*popularity)
 						+"where mid="+results.getInt("mid"));
 			}
-			//add the new stalkee to the stalkee list in teh session
-			stalkee_list = session.getAttribute("stalkee_list").toString();
-			if(stalkee_list!=null&&stalkee_list.length()>0){
-				stalkee_list = new StringBuilder().append(",").append(stalkee).toString();
-			}else{
-				stalkee_list = stalkee;
-			}
-			session.setAttribute("stalkee_list", stalkee_list);
 			response.sendError(HttpServletResponse.SC_NO_CONTENT);
 			stmt.close();
 			conn.close();

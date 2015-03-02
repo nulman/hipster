@@ -11,6 +11,7 @@ import java.sql.Statement;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.SingleThreadModel;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class SignUp
  */
+@SuppressWarnings("deprecation")
 @WebServlet("/SignupServlet")
-public class SignUp extends HttpServlet {
+public class SignUp extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
     /**

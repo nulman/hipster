@@ -17,11 +17,16 @@
 <body data-ng-controller="ProfileController as profile">
 <div class="container">
 		<div class="row">
-			<div class="col-sm-12">
-				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
+			
+			<div class="col-sm-12" data-ng-controller="UserController as user">
+				<a href="/Hipster/mainPage.html"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
 				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
-				<h3 class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></h3>
+				
+				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
+				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
+				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
 			</div>
+
 		
 			<div class="col-sm-4">
 				<div class="userdetails">
@@ -51,38 +56,50 @@
 				</div>
 			</div>
 		
+		
 			<div class="col-sm-8">
-			<br>
-			<h1>Previous Posts:</h1>
-			<br>
+			<h1>Previous Messages:</h1>
 			
-				<div class="usermessages" ng-repeat="messages in profile.messages|limitTo:10"> 
+			<br>
+				<div class="usermessages" data-ng-repeat="messages in profile.messages|limitTo:10"> 
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
-			  		<h3><a data-ng-href="user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="user/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
+			  		<a data-ng-href="" class="timesrepublished"><h4> Rebuplished #{{messages.TIMES_REPUBLISHED}} times</h4></a>
+			  		<a data-ng-href="/Hipster/user/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+			  	
+			  	<!-- follow button -->	
+			  		<form action="Follow" method="post">
+			  			<input type="hidden" name="nickname"  value="{{messages.NICKNAME}}"/>
+						<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
+			  		</form>
+			  		
 			  		<br><br>
-			  		<div class="textcontent" >
-			  			<span ng-bind-html="messages.TEXT"></span>
+			  		<div class="textcontent" data-ng-bind-html-unsafe="message.TEXT">
+				  		<span data-ng-bind-html="messages.TEXT"></span>
+				  		{{message}}
 				 	</div>
 			 	 <br>
 			 	 
-			 	 <a data-ng-href="" class="replymessage">Reply</a>
+			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
-			  		<form action="Post" method="post" class="newreply">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
+			  		<form action="Post" method="post" data-ng-show="profile.showreply[$index]">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
+							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
+							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
-							<button class="btn btn" >Submit</button>
+							<button class="btn btn" data-ng-click="togglereply($index)" >Submit</button>
 			  		</form>
-			  	<a data-ng-href="" class="rebuplishmessage">Republish</a>
+			  		
+			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
 			  
-			  		<form action="Post" method="post" class="newrepublish">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
+			  		<form action="Post" method="post" data-ng-show="profile.showrepublish[$index]">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
+							<input type="hidden" name="reply_to"  value="0" />
+							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>
-							<button class="btn btn" >Submit</button>
-					</form>
+							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
+			  		</form>
 				
 			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
 			  	<br>
