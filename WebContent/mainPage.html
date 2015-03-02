@@ -71,25 +71,25 @@
 				 	</div>
 			 	 <br>
 			 	 
-			 	 <a href="" class="replymessage" data-ng-click="toggle($index)">Reply</a>
+			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
-			  		<form action="Post" method="post" data-ng-show="main.showreply">
+			  		<form action="Post" method="post" data-ng-show="main.showreply[$index]">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{message.MID}} />
-							<input type="hidden" name="republish"  data-ng-value={{message.MID}} />
+							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
-							<button class="btn btn" data-ng-click="refresh()" >Submit</button>
+							<button class="btn btn" data-ng-click="togglereply($index)" >Submit</button>
 			  		</form>
 			  		
-			  		
-			  	<a href="" class="rebuplishmessage">Republish</a>
+			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
 			  
-			  		<form action="Post" method="post" class="newrepublish">
+			  		<form action="Post" method="post" data-ng-show="main.showrepublish[$index]">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="0" />
+							<input type="hidden" name="reply_to"  data-ng-value="0" />
+							<input type="hidden" name="republish"  data-ng-value={{message.MID}} />
 							<br><br>
-							<button class="btn btn" >Submit</button>
-					</form>
+							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
+			  		</form>
 				
 			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
 			  	<br>

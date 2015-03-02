@@ -34,7 +34,8 @@ function getName(VarSearch) {
 
 		var main= this;
 		main.messages=[];
-		main.showreply= [];
+		main.showreply= [false];
+		main.showrepublish= [false];
 		
 		$http.post('Discover','me,latest,0').success(function(data){
 			main.messages= data;
@@ -57,13 +58,23 @@ function getName(VarSearch) {
 	        };
 	        
 	        
-	    $scope.toggle= function($index){
-	    	if(main.showreply==false){
-	    		main.showreply[$index]=true;
+	    $scope.togglereply= function($index){
+	    	if(main.showreply[$index]==false){
 	    		$scope.pause();
+	    		main.showreply[$index]=true;
 	    	}else{
-	    		main.showreply[$index]=false;
 	    		$scope.refresh();
+	    		main.showreply[$index]=false;
+	    	}
+	    };
+	    
+	    $scope.togglerepublish= function($index){
+	    	if(main.showrepublish[$index]==false){
+	    		$scope.pause();
+	    		main.showrepublish[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		main.showrepublish[$index]=false;
 	    	}
 	    };
 		
