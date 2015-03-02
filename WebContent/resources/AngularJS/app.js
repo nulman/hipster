@@ -13,75 +13,101 @@ function getName(VarSearch) {
 (function(){
 	
 //main module
-	var app = angular.module('user', [ 'ngSanitize']);
+	var app = angular.module('Hipster', [ 'ngSanitize']);
 	
-	//MainController- used in the Main page- queries for the current user's details and latest 10 posts from users i follow
-	app.controller('MainController',['$http', function($http){	
+	//UserController- used in all pages- queries for the current user's details
+	app.controller('UserController',['$http', function($http){	
 
 		var user= this;
 		user.details=[];
-		user.messages=[];
 		
-		//var name= getName("nickname");
-		var name= 'nick';
-		
-		$http.post('user',name).success(function(data){
+		//fetching the current user's information from the server
+		$http.post('user','me').success(function(data){
 			user.details= data[0];
 		});
+	
+	}]);
+	
+	
+	//MainController- used in the Main page- queries for the latest 10 posts from users i follow
+	app.controller('MainController',['$scope','$interval','$http', function($scope,$interval,$http){	
+
+		var main= this;
+		main.messages=[];
+		main.showreply= [];
 		
-		$http.post('Discover','stalkee,latest').success(function(data){
-			user.messages= data;
+		$http.post('Discover','me,latest,0').success(function(data){
+			main.messages= data;
 		});
+		
+		$scope.refresh= function(){
+			
+			stop= $interval(function(){
+			$http.post('Discover','me,latest,0').success(function(data){
+				main.messages= data;
+			});
+			}, 5000);
+		};
+		
+		$scope.pause = function() {
+	          
+	        $interval.cancel(stop);
+	        stop = undefined;
+	           
+	        };
+	        
+	        
+	    $scope.toggle= function($index){
+	    	if(main.showreply==false){
+	    		main.showreply[$index]=true;
+	    		$scope.pause();
+	    	}else{
+	    		main.showreply[$index]=false;
+	    		$scope.refresh();
+	    	}
+	    };
 		
 	}]);
 	
 	//DiscoverController- used in the Discover page- queries for the top 10 posts of all users
 	app.controller('DiscoverController',['$http', function($http){	
 
-		var user= this;
-		user.details=[];
-		user.messages=[];
-		
-		//var name= getName("nickname");
-		var name= 'nick';
-		
-		$http.post('user',name).success(function(data){
-			user.details= data[0];
-		});
-		
-		$http.post('Discover','all,popularity').success(function(data){
-			user.messages= data;
-		});
-		
-	}]);
-	
-	//UserController- used in User pages- queries for the user details and latest 10 posts
-	app.controller('UserController',['$http', function($http){	
+		var discover= this;
+		discover.messages=[];
 
-		var user= this;
-		user.details=[];
-		user.messages=[];
-		
-		//var name= getName("nickname");
-		var name= 'nick';
-		
-		$http.post('user',name).success(function(data){
-			user.details= data[0];
-		});
-		
-		$http.post('Discover','nick,latest').success(function(data){
-			user.messages= data;
+		$http.post('Discover','all,popularity,0').success(function(data){
+			discover.messages= data;
 		});
 		
 	}]);
 	
-	//FollowersController- used in /followers/user pages, queries for the top 10 followers
+	//ProfileController- used in user profile pages- queries for the user details and latest 10 posts
+	app.controller('ProfileController',['$http', function($http){	
+
+		var profile= this;
+		profile.details=[];
+		profile.messages=[];
+		
+		var name= getName("nickname");
+		
+		$http.post('user',name).success(function(data){
+			profile.details= data[0];
+		});
+		
+		var request= name+",latest,0";
+		
+		$http.post('Discover',request).success(function(data){
+			profile.messages= data;
+		});
+		
+	}]);
+	
+	//FollowersController- used in /followers/user pages, queries for the user's details and the top 10 followers
 	app.controller('FollowersController',function(){
 		var followers= this;
 		followers.followers=[];
 		
-		//var name= getName("nickname");
-		var name= 'nick';
+		var name= getName("nickname");		
 		
 		$http.post('followers',name).success(function(data){
 			followers.followers= data;
@@ -89,13 +115,12 @@ function getName(VarSearch) {
 	
 	});
 	
-	//FollowingController- used in /following/user pages, queries for the top 10 users who User is following
+	//FollowingController- used in /following/user pages, queries for the user's details and the top 10 users who User is following
 	app.controller('FollowingController',function(){
 		var following= this;
 		following.following=[];
 		
-		//var name= getName("nickname");
-		var name= 'nick';
+		var name= getName("nickname");
 		
 		$http.post('following',name).success(function(data){
 			following.following= data;
@@ -103,12 +128,31 @@ function getName(VarSearch) {
 	
 	});
 	
+	//TopicController- used in topic pages, queries for the latest 10 messages who contain a specific topic
+	app.controller('TopicController',function(){
+		var topic= this;
+		topic.topic=[];
+		
+		var topicname= getName("topic");
+		
+		$http.post('Discover','all,latest,0').success(function(data){
+			following.following= data;
+		});
+	
+	});
+	
+	
+	//custom filter to display time in 'time ago' format
 	app.filter('timeago', function() {
 		  return function(stamp) {
 			  
-			  var now=new Date(stamp.replace(' ','T')+'Z');
-				
-			    var secs = (((new Date()).getTime() / 1000) - now.getTime()/1000);
+			  stamp= stamp.substring(0, stamp.length - 4);
+			  var t = stamp.split(/[- :]/);
+
+			  var Stamp = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+
+			  
+			    var secs = (((new Date()).getTime() / 1000) - (Stamp.getTime()/1000));
 			    Math.floor(secs);
 			    var minutes = secs / 60;
 			    secs = Math.floor(secs % 60);
@@ -125,28 +169,12 @@ function getName(VarSearch) {
 			    if (days < 1) {
 			        return hours + (hours > 1 ? ' hours ago' : ' hour ago');
 			    }
-			    return stamp.substring(0, stamp.length - 7);;
+			    return stamp.substring(0, stamp.length - 3);
 
 		  };
 		});
 	
-	$(document).ready(function(){
-		$(".replymessage").click(function(e){
-	    	e.preventDefault();
-	    	$(this).next('.newreply').toggle("slow");
-	    	$('.rebuplishmessage').toggle();
-	    	
-	    });
-	});
-
-	$(document).ready(function(){
-	    $(".rebuplishmessage").click(function(e){
-	    	e.preventDefault();
-	    	$(this).next('.newrepublish').toggle("slow");
-	    	
-	    });
-
-	});
+	
 
 
 	

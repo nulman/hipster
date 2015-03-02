@@ -49,7 +49,9 @@ public class SignUp extends HttpServlet {
 		String description = null;
 		Connection conn = null;
 		Statement stmt = null;
+		Statement stmt2 = null;
 		ResultSet results = null;
+		ResultSet results2 = null;
 		RequestDispatcher rd = null;
 		boolean stmtSuccess = false;
 		
@@ -66,12 +68,22 @@ public class SignUp extends HttpServlet {
 		try{
 			conn = Tools.getConnection();
 			stmt=conn.createStatement();
+			stmt2=conn.createStatement();
 			results=stmt.executeQuery("select user_id from users where username='"+username+"' fetch first row only");
-			//username already exists
-			if(results.next()){
+			results2=stmt.executeQuery("select user_id from users where username='"+nickname+"' fetch first row only");
+			//make sure the user isnt trying to sign up with reserved names
+			if(internals.Constants.Illegal_Names.contains(username)){
 				out.println("<div><font size=20>the name "+username+" is already taken</font></div>");
-				
-				
+			}else if(internals.Constants.Illegal_Names.contains(username)){
+				out.println("<div><font size=20>the name "+nickname+" is already taken</font></div>");
+			}
+			//username already exists
+			else if(results.next()){
+				out.println("<div><font size=20>the name "+username+" is already taken</font></div>");
+			}
+			//username already exists
+			else if(results2.next()){
+				out.println("<div><font size=20>the name "+nickname+" is already taken</font></div>");
 			}else{
 				//this is indeed a new user
 				System.err.println("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
@@ -84,6 +96,8 @@ public class SignUp extends HttpServlet {
 					out.println("<div><font size=20>a database error has occured, please try again </font></div>");
 				}
 			}
+			stmt.close();
+			stmt2.close();
 			conn.close();
 			rd = getServletContext().getRequestDispatcher("/login.html");
             rd.include(request, response);

@@ -50,13 +50,14 @@ public class UserPage extends HttpServlet {
 					+nickname+"'");
 			System.err.println("query successfull");
 			if(results.next()){
-				//rd = getServletContext().getRequestDispatcher("/profile.html?nickname=\""+nickname+"\"");
-	            //rd.include(request, response);
-				response.sendRedirect("/Hipster/profile.html?nickname=\""+nickname+"\"");
+				//rd = getServletContext().getRequestDispatcher("/profile.html?nickname="+nickname);
+	           // rd.include(request, response);
+				response.sendRedirect("/Hipster/profile.html?nickname="+nickname);
 			}else{
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}
-			
+			stmt.close();
+			conn.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -69,13 +70,21 @@ public class UserPage extends HttpServlet {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet results = null;
+		String nickname = null;
+		nickname = Tools.RequestToString(request);
+		//handle request to know who is the current user in the session
+		if(nickname.contentEquals("me")){
+			nickname = request.getSession().getAttribute("nickname").toString();
+		}
 		
 		try{
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
 			results = stmt.executeQuery("select nickname,pic,user_id,description,stalkers,stalkees from users where nickname='"
-					+Tools.RequestToString(request)+"'");
+					+nickname+"'");
 			Tools.ResSetToJSONRes(response, results);
+			stmt.close();
+			conn.close();
 			
 		}catch(Exception e){
 			e.printStackTrace();

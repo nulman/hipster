@@ -9,6 +9,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -65,16 +66,22 @@ public class Post extends HttpServlet {
 		ResultSet owner =null;
 		ResultSet topic = null;
 		HttpSession session = request.getSession();
-		String  [] req_par = Tools.RequestToString(request).split(",");
+		//req_par= reply_to,republish_of,text
+		//String  [] req_par = Tools.RequestToString(request).split(",");
+		Enumeration<String> t =	request.getParameterNames();
+		while(t.hasMoreElements()){
+			System.err.println(t.nextElement());
+		}
+		System.err.println("got reply_to:republish:text "+request.getParameter("reply_to")+" "+request.getParameter("republish")
+				+" "+request.getParameter("text"));
 		//check if we got a reply_to
-		temp = req_par[0];
+		temp = request.getParameter("reply_to");
 		if(temp!=null && temp.length()>0){
 			reply_to=Integer.parseInt(temp);
 		}
-		//probably "fix" text by replacing %20 with spaces if that happens in post
 		//check length of text<=140
-		text=req_par[2];
-		if(text.length()>140){
+		text=request.getParameter("text");
+		if(text != null && text.length()>140){
 			//if its too long craft an error response
 			 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	    		return;
@@ -107,7 +114,7 @@ public class Post extends HttpServlet {
 				popularity = owner.getDouble("popularity");
 	System.err.println("0");
 				//check if this is a republish
-				temp = req_par[1];
+				temp = request.getParameter("republish");;
 	System.err.println("0.4");
 				if(temp!=null && temp.length()>0){
 	System.err.println("0.5");
@@ -249,11 +256,13 @@ public class Post extends HttpServlet {
 			System.err.println();
 			System.err.println("5");
 		}
-				//returns the newly creates post
-				Tools.ResSetToJSONRes(response, stmt.executeQuery("select * from posts where mid="+mid));
+				response.sendError(HttpServletResponse.SC_NO_CONTENT);
 				stmt.close();
-				stmt2.close();
-				stmt3.close();
+				System.err.println("6");
+				//stmt2.close();
+				System.err.println("7");
+				//stmt3.close();
+				System.err.println("8");
 				conn.close();
 				
 		    }catch (SQLException e) {

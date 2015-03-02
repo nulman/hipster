@@ -71,6 +71,8 @@ public class Following extends HttpServlet {
 					+"stalker.stalkee=users.nickname where stalker.stalker='"
 			+Tools.RequestToString(request)+"' order by users.popularity desc fetch first 10 rows only");
 			Tools.ResSetToJSONRes(response, results);
+			stmt.close();
+			conn.close();
 			
 		}catch(Exception e){
 			e.printStackTrace();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app="user">
+<html data-ng-app="Hipster">
 <head>
   <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
   <meta charset="utf-8">
@@ -12,9 +12,10 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script type="text/javascript" src="resources/AngularJS/app.js"></script>
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
+  <script type="text/javascript" src="resources/AngularJS/jQuery.js"></script>
 </head>
 
-<body data-ng-controller="MainController as main">
+<body data-ng-controller="UserController as user">
 
 <div class="container">
 		
@@ -30,55 +31,62 @@
 				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
 				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
 				
-				<img class="topavatar" data-ng-src="{{main.details.PIC}}" align="bottom" alt="avatar">
-				<a href="users/{{main.details.NICKNAME}}" class="mainnickname"><h3>@{{main.details.NICKNAME}}</h3></a>
-				<h3 class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></h3>
+				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
+				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
+				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
+				<!-- 
+				<h3 class="navbar-text navbar-right"><form action="Logout" method="post" class="logout"><input type="submit" value="Logout"></form></h3>
+				-->
 			</div>
 
 			<div class="col-sm-4">
 				<div class="userdetails">
-					<img class="avatar" data-ng-src="{{main.details.PIC}}" align="bottom" alt="avatar">
-					<a href="users/{{main.details.NICKNAME}}" class="mainnickname"><h3>@{{main.details.NICKNAME}}</h3></a>
+					<img class="avatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
+					<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 					<br><br>
 					
 					<h3>Something on your mind?:</h3>
 					<br>
 					<form action="Post" method="post" class="newpost">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
+							<input type="hidden" name="reply_to"  value="0" />
+							<input type="hidden" name="republish"  value="0" />
 							<br><br>
 							<button class="btn btn" >Submit</button>
 				    </form>
 				</div>
 			</div>
 		
-			<div class="col-sm-8">
+			<div class="col-sm-8" data-ng-controller="MainController as main"  data-ng-init="refresh()">
 			<br>
-			
-				<div class="usermessages" ng-repeat="messages in main.messages|limitTo:10"> 
+				<div class="usermessages" data-ng-repeat="messages in main.messages|limitTo:10"> 
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
-			  		<h3><a data-ng-href="/users/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="/users/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
+			  		<a data-ng-href="/Hipster/user/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
 			  		<br><br>
-			  		<div class="textcontent" ng-bind-html-unsafe="message.TEXT">
-				  		{{messages.TEXT}}
+			  		<div class="textcontent" data-ng-bind-html-unsafe="message.TEXT">
+				  		<span data-ng-bind-html="messages.TEXT"></span>
+				  		{{message}}
 				 	</div>
 			 	 <br>
 			 	 
-			 	 <a data-ng-href="" class="replymessage">Reply</a>
+			 	 <a href="" class="replymessage" data-ng-click="toggle($index)">Reply</a>
 			  
-			  		<form action="Post" method="post" class="newreply">
+			  		<form action="Post" method="post" data-ng-show="main.showreply">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
+							<input type="hidden" name="reply_to"  data-ng-value={{message.MID}} />
+							<input type="hidden" name="republish"  data-ng-value={{message.MID}} />
 							<br><br>
-							<button class="btn btn" >Submit</button>
+							<button class="btn btn" data-ng-click="refresh()" >Submit</button>
 			  		</form>
-			  	<a data-ng-href="" class="rebuplishmessage">Republish</a>
+			  		
+			  		
+			  	<a href="" class="rebuplishmessage">Republish</a>
 			  
 			  		<form action="Post" method="post" class="newrepublish">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="" />
+							<input type="hidden" name="reply_to"  value="0" />
 							<br><br>
 							<button class="btn btn" >Submit</button>
 					</form>

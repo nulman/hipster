@@ -82,24 +82,8 @@ public class LoginServlet extends HttpServlet {
 			if(results.next()){
 				uid=results.getInt("USER_ID");
 				pic=results.getString("PIC");
-	//this doesnt get sent...
-	out.println("<font color=red size=20>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
+	//out.println("<font color=red size=20>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
 	System.err.println("<font color=red>username="+name+" pass="+pass+" id="+uid+" pic_url="+pic+" </font>\n");
-				/*Cookie cookie = new Cookie("hipsterUser", name);
-	            // setting cookie to expiry in 60 mins
-				cookie.setMaxAge(60 * 60);
-	            response.addCookie(cookie);
-	            System.err.println("///in loging servlet, added cookie: "+ cookie.getName());
-	            cookie = new Cookie("hipsterUid", String.valueOf(uid));
-	            // setting cookie to expiry in 60 mins
-				cookie.setMaxAge(60 * 60);
-	            response.addCookie(cookie);
-	            cookie = new Cookie("hipsterPic", pic);
-	            // setting cookie to expiry in 60 mins
-				cookie.setMaxAge(60 * 60);
-	            response.addCookie(cookie);
-	            //redirect to personal page
-	            //response.sendRedirect("/Hipster/LoginSuccess.jsp");*/
 				session = request.getSession();
 				session.setAttribute("username", results.getString("username"));
 				session.setAttribute("user_id", results.getInt("user_id"));
@@ -118,14 +102,16 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("stalkee_list", stalkee_list);
 				session.setMaxInactiveInterval(60*30);
 
-	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/LoginSuccess.jsp");
+	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/mainPage.html");
 	            rd.include(request, response);
 	            out.close();
 	          //close DB connection
+	            stmt.close();
 				conn.close();
 	            return;
 			}else{
 				//close DB connection
+				stmt.close();
 				conn.close();
 	            //PrintWriter out= response.getWriter();
 	            out.println("<a href=\"/Hipster/TestServlet\"><font color=red>Your creds aren\'t legit enough for Hipster.</font></a>");

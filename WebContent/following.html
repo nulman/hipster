@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app="user">
+<html data-ng-app="Hipster">
 <head>
   <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
   <meta charset="utf-8">
@@ -53,7 +53,7 @@
 			<h1>Following:</h1>
 			<br>
 			
-				<div class="following"  ng-repeat="following in follower.following|limitTo:10"> 
+				<div class="following"  data-ng-repeat="following in follower.following|limitTo:10"> 
 			  		
 			  		<img class="avatar" data-ng-src="{{following.PIC}}" align="bottom" alt="avatar">
 			  		<h3><a data-ng-href="/users/{{following.NICKNAME}}" class="nickname">@{{following.NICKNAME}}</a></h3>

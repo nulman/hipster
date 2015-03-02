@@ -108,6 +108,9 @@ public class Follow extends HttpServlet {
 				stalkee_list = stalkee;
 			}
 			session.setAttribute("stalkee_list", stalkee_list);
+			response.sendError(HttpServletResponse.SC_NO_CONTENT);
+			stmt.close();
+			conn.close();
 			
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block

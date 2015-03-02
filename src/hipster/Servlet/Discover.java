@@ -58,15 +58,23 @@ public class Discover extends HttpServlet {
 		HttpSession session = request.getSession();
 		String author = null;
 		String sort_by = null;
+		String req = null;
+		int offset = 0;
 		
 		//check what we need to return
 		//author = (String)request.getAttribute("author");
 		//sort_by = (String)request.getAttribute("sort_by");
 
-		
-	      String [] temp = Tools.RequestToString(request).split(",");
-	      author=temp[0];
-	      sort_by= temp[1];
+	req=Tools.RequestToString(request);
+	String [] temp = req.split(",");
+	System.err.println("got "+temp.length+" fields the request is: "+req);
+	author=temp[0];
+	sort_by= temp[1];
+	if(temp.length==3){
+		offset = Integer.parseInt(temp[2]);
+	}else{
+	  offset = 0;
+	}
 
 		
 	System.err.println("in discover. got author:sort_by "+author+":"+sort_by);
@@ -81,16 +89,20 @@ public class Discover extends HttpServlet {
 			}
 			//posts by whom?
 			if(author.equals("all")){
-				author = "<>"+Integer.parseInt(session.getAttribute("user_id").toString());
+				author = "not in "+Integer.parseInt(session.getAttribute("user_id").toString());
 			}else if(author.equals("stalkee")){
-					author = "=(select stalkee_id from stalker where stalker='"
+					author = "in (select stalkee_id from stalker where stalker='"
 				+session.getAttribute("nickname").toString()+"')";
+			}else if(author.equals("me")){
+				author =" in ( select stalkee_id from stalker where stalker='"+session.getAttribute("nickname").toString()
+						+"' union select users.user_id from users where users.nickname='"+session.getAttribute("nickname").toString()+"' )";
 			}else{
 				author="=(select user_id from users where nickname='"+author+"')";
 			}
 			results = stmt.executeQuery("select posts.*, users.nickname, users.pic from posts join users "
 					+"on users.user_id = posts.owner where users.user_id"+author
-					+" order by posts."+sort_by+" desc fetch first 10 rows only");
+					+" order by posts."+sort_by+" desc offset "+offset+" rows fetch first 10 rows only");
+			
 			//debug code
 			/*ResultSetMetaData meta = results.getMetaData();
 			while(results.next()){
@@ -100,6 +112,8 @@ public class Discover extends HttpServlet {
 			       }
 			}*/
 			Tools.ResSetToJSONRes(response, results);
+			stmt.close();
+			conn.close();
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

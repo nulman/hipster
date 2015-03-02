@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app="user">
+<html data-ng-app="Hipster">
 <head>
   <title>Hipster!- A social network so exclusive it's like you're talking to yourself</title>
   <meta charset="utf-8">
@@ -14,7 +14,7 @@
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
 </head>
 
-<body data-ng-controller="UserController as user">
+<body data-ng-controller="ProfileController as profile">
 <div class="container">
 		<div class="row">
 			<div class="col-sm-12">
@@ -25,28 +25,28 @@
 		
 			<div class="col-sm-4">
 				<div class="userdetails">
-					<a href="user/{{user.details.NICKNAME}}" class="mainnickname"><h1>@{{user.details.NICKNAME}}</h1></a>
+					<a href="user/{{profile.details.NICKNAME}}" class="mainnickname"><h1>@{{profile.details.NICKNAME}}</h1></a>
 					<br>
-					<h3 id=rank>Hipster Rank: #{{user.details.USER_ID}}</h3>
+					<h3 id=rank>Hipster Rank: #{{profile.details.USER_ID}}</h3>
 					<br><br>
 					
-				    <img class="mainavatar" data-ng-src="{{user.details.PIC}}" alt="main user avatar">
+				    <img class="mainavatar" data-ng-src="{{profile.details.PIC}}" alt="main user avatar">
 					
 				        <p>
 				        	<br>
-				            With <a data-ng-href="followers/{{user.details.NICKNAME}}" >{{user.details.STALKERS}}  Followers </a>,   
+				            With <a data-ng-href="followers/{{profile.details.NICKNAME}}" >{{profile.details.STALKERS}}  Followers </a>,   
 				            <br>
-				            <a data-ng-href="following/{{user.details.NICKNAME}}" >Following {{user.details.STALKEES}}</a> other Hipsters.
+				            <a data-ng-href="following/{{profile.details.NICKNAME}}" >Following {{profile.details.STALKEES}}</a> other Hipsters.
 				            <br><br>
 				            
 				            <div class="description">
 				            <b>About Me:</b><br>
-				            <cite>{{user.details.DESCRIPTION}}</cite>
+				            <cite>{{profile.details.DESCRIPTION}}</cite>
 				            </div>
 				            
 				        </p>
 				        
-				   <a data-ng-href="user/{{user.details.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
+				   <a data-ng-href="user/{{profile.details.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
 				   <br>
 				</div>
 			</div>
@@ -56,7 +56,7 @@
 			<h1>Previous Posts:</h1>
 			<br>
 			
-				<div class="usermessages" ng-repeat="messages in user.messages|limitTo:10"> 
+				<div class="usermessages" ng-repeat="messages in profile.messages|limitTo:10"> 
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
 			  		<h3><a data-ng-href="user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
