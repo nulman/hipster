@@ -81,14 +81,53 @@ function getName(VarSearch) {
 	}]);
 	
 	//DiscoverController- used in the Discover page- queries for the top 10 posts of all users
-	app.controller('DiscoverController',['$http', function($http){	
+	app.controller('DiscoverController',['$scope','$interval','$http', function($scope,$interval,$http){	
 
 		var discover= this;
 		discover.messages=[];
+		discover.showreply= [false];
+		discover.showrepublish= [false];
 
 		$http.post('Discover','all,popularity,0').success(function(data){
 			discover.messages= data;
 		});
+		
+		$scope.refresh= function(){
+			
+			stop= $interval(function(){
+			$http.post('Discover','all,popularity,0').success(function(data){
+				discover.messages= data;
+			});
+			}, 2000);
+		};
+		
+		$scope.pause = function() {
+	          
+	        $interval.cancel(stop);
+	        stop = undefined;
+	           
+	        };
+	        
+	        
+	    $scope.togglereply= function($index){
+	    	if(discover.showreply[$index]==false){
+	    		$scope.pause();
+	    		discover.showreply[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		discover.showreply[$index]=false;
+	    	}
+	    };
+	    
+	    $scope.togglerepublish= function($index){
+	    	if(discover.showrepublish[$index]==false){
+	    		$scope.pause();
+	    		discover.showrepublish[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		discover.showrepublish[$index]=false;
+	    	}
+	    };
 		
 	}]);
 	

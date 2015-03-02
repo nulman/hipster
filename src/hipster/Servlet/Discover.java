@@ -42,7 +42,7 @@ public class Discover extends HttpServlet {
 		request.setAttribute("sort_by", "time");
 		System.err.println("in discover GET. got author:sort_by "+(String)request.getAttribute("author")
 				+":"+(String)request.getAttribute("sort_by"));*/
-		RequestDispatcher rd = request.getRequestDispatcher("/LoginSuccess.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/discover.html");
 		rd.include(request, response);
 		
 	}
@@ -86,10 +86,10 @@ public class Discover extends HttpServlet {
 				sort_by = "popularity";
 			}else{
 				sort_by = "stamp";
-			}
+			}	
 			//posts by whom?
 			if(author.equals("all")){
-				author = "not in "+Integer.parseInt(session.getAttribute("user_id").toString());
+				author = "<> "+Integer.parseInt(session.getAttribute("user_id").toString());
 			}else if(author.equals("stalkee")){
 					author = "in (select stalkee_id from stalker where stalker='"
 				+session.getAttribute("nickname").toString()+"')";

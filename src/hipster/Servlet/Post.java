@@ -115,6 +115,7 @@ public class Post extends HttpServlet {
 	System.err.println("0");
 				//check if this is a republish
 				temp = request.getParameter("republish");;
+				System.err.println("republish = "+temp);
 	System.err.println("0.4");
 				if(temp!=null && temp.length()>0){
 	System.err.println("0.5");
@@ -205,7 +206,7 @@ public class Post extends HttpServlet {
 						continue;
 					}
 					//replace legal @mentions with link to profile pages of relevant users
-					text=text.replace(mention, "<a href=\"/Hipster/users/"+mention.substring(1)+"\">"+mention+"</a>");
+					text=text.replace(mention, "<a href=\"/Hipster/user/"+mention.substring(1)+"\">"+mention+"</a>");
 					//constructs a string of mentions "@mention,@mention2..."
 					if(mentions == null){
 						mentions= new StringBuilder().append(mention).toString();
