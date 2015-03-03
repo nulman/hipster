@@ -112,7 +112,7 @@
 			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">#{{messages.TIMES_REPUBLISHED}} Republish</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="profile.showrepublish[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
+				            <textarea name="text" class="republishmessagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>

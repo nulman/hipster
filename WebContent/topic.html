@@ -29,8 +29,8 @@
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
 			</div>
-<!-- user details -->
-			<div class="col-sm-4">
+
+			<div class="col-sm-3">
 				<div class="userdetails">
 					<img class="avatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 					<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
@@ -38,19 +38,22 @@
 					
 					<h3>Something on your mind?:</h3>
 					<br>
-					<form action="Post" method="post" class="newpost" name="newform" data-ng-submit="reset()">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140" data-ng-model="txtarea"></textarea>
+					<form action="Post" method="post" class="newpost">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value="0" />
 							<br><br>
-							<button class="btn btn">Submit</button>
+							<button class="btn btn" >Submit</button>
 				    </form>
 				</div>
 			</div>
- 		
-			<div class="col-sm-8" data-ng-controller="MainController as main"  data-ng-init="refresh()">
+			
+			<div class="col-sm-8" data-ng-controller="TopicController as topic"  data-ng-init="refresh()">
 			<br>
-				<div class="usermessages" data-ng-repeat="messages in main.messages|limitTo:10"> 
+			<h1>Topic search results:</h1>
+			<br>
+				<div class="usermessages" data-ng-repeat="messages in topic.messages|limitTo:10"> 
+			  				  		
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
 			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
@@ -71,7 +74,7 @@
 			 	 
 			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
-			  		<form action="Post" method="post" data-ng-show="main.showreply[$index]">
+			  		<form action="Post" method="post" data-ng-show="topic.showreply[$index]">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
 							<input type="hidden" name="republish"  data-ng-value="0" />
@@ -81,8 +84,8 @@
 			  		
 			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
 			  
-			  		<form action="Post" method="post" data-ng-show="main.showrepublish[$index]">
-				            <textarea name="text" class="republishmessagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
+			  		<form action="Post" method="post" data-ng-show="topic.showrepublish[$index]">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>
@@ -94,8 +97,7 @@
 			 	 
 				</div>
 				
-			</div>	
-			
+			</div>
 		</div>
 </div>
 

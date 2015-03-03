@@ -170,7 +170,10 @@ input[type=checkbox]{
 	transform: scale(1.5);
 }
 
-
+.republishmessagetext{
+	background-color: #c0c0c0;
+	color: #808080;
+}
 
 
 
