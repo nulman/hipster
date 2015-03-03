@@ -5,17 +5,11 @@ import internals.Tools;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.SingleThreadModel;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * Servlet implementation class Post
  */
 @SuppressWarnings("deprecation")
-@WebServlet("/Post")
+//@WebServlet("/Post")
 public class Post extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
@@ -45,9 +39,7 @@ public class Post extends HttpServlet implements SingleThreadModel{
 		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//POSTS(owner integer, mid, stamp TIMESTAMP ,replyto integer default null, 
 				//republished int default 0,text varchar(140))
@@ -229,8 +221,6 @@ public class Post extends HttpServlet implements SingleThreadModel{
 				if(subject.startsWith("#")){
 					//replace all #topics with links to the topic
 					text=text.replace(subject, "<a href=\"/Hipster/topic/"+subject.substring(1)+"\">"+subject+"</a>");
-					//add relevant topics to the subjects table
-					stmt.executeUpdate("insert into topic(mid,topic) values("+mid+",'"+subject+"')");
 					System.err.print(subject+" ");
 				}
 			}
@@ -251,7 +241,12 @@ public class Post extends HttpServlet implements SingleThreadModel{
 		    	}
 		       mid = results.getInt(1);
 			System.err.println(mid+"\n3");
-			
+			for(String subject : prework){
+				if(subject.startsWith("#")){
+					//add relevant #topics to the topic table
+					stmt.executeUpdate("insert into topic(mid,topic) values("+mid+",'"+subject.substring(1)+"')");
+				}
+			}
 			//adds relevant information to the mentions(id of the person that is mentioned, id of the mentioning post) table
 			if (mentions!=null){
 			stmt.executeUpdate("insert into mentions(mentionee, mentioner) values('"+mentions+"' ,"+mid+")");

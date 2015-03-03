@@ -12,7 +12,7 @@ import java.sql.Statement;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.SingleThreadModel;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class SignUp
  */
 @SuppressWarnings("deprecation")
-@WebServlet("/SignupServlet")
+//@WebServlet("/SignupServlet")
 public class SignUp extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
@@ -55,9 +55,6 @@ public class SignUp extends HttpServlet implements SingleThreadModel{
 		ResultSet results = null;
 		ResultSet results2 = null;
 		RequestDispatcher rd = null;
-		boolean stmtSuccess = false;
-		
-		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
@@ -72,7 +69,10 @@ public class SignUp extends HttpServlet implements SingleThreadModel{
 			stmt=conn.createStatement();
 			stmt2=conn.createStatement();
 			results=stmt.executeQuery("select user_id from users where username='"+username+"' fetch first row only");
-			results2=stmt.executeQuery("select user_id from users where username='"+nickname+"' fetch first row only");
+			results2=stmt2.executeQuery("select user_id from users where username='"+nickname+"' fetch first row only");
+			if(pic==null || pic.length()<1){
+				pic= "resources/images/defaultuserimg.png";
+			}
 			//make sure the user isnt trying to sign up with reserved names
 			if(internals.Constants.Illegal_Names.contains(username)){
 				out.println("<div><font size=20>the name "+username+" is already taken</font></div>");
@@ -90,13 +90,10 @@ public class SignUp extends HttpServlet implements SingleThreadModel{
 				//this is indeed a new user
 				System.err.println("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
 						+password+"', '"+nickname+"', '"+pic+"', '"+description+"')");
-				stmtSuccess = stmt.execute("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
+					stmt.execute("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
 						+password+"', '"+nickname+"', '"+pic+"', '"+description+"')");
-				if(stmtSuccess){
 					out.println("<div><font size=20>registration successful! please log in to continue</font></div>");
-				}else{
-					out.println("<div><font size=20>a database error has occured, please try again </font></div>");
-				}
+
 			}
 			stmt.close();
 			stmt2.close();

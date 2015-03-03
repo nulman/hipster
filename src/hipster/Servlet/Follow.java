@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.SingleThreadModel;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  * Servlet implementation class Follow
  */
 @SuppressWarnings("deprecation")
-@WebServlet(urlPatterns = { "/Follow" })
+//@WebServlet(urlPatterns = { "/Follow" })
 public class Follow extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
@@ -87,19 +87,19 @@ public class Follow extends HttpServlet implements SingleThreadModel{
 			}
 			//increment the amount of people the user is following
 			stalkee_id=results.getInt("user_id");
-			results = stmt.executeQuery("select stalkees from users where user_id="+curr_user_id);
+			results = stmt.executeQuery("select stalkers from users where user_id="+stalkee_id);
 			if(results.next()){
-				stmt2.executeUpdate("update users set stalkees="+(results.getInt("stalkees")+1) +"where user_id="
-			+curr_user_id);
+				stmt2.executeUpdate("update users set stalkers="+(results.getInt("stalkers")+1) +"where user_id="
+			+stalkee_id);
 			}
 			//get the profile
-			results = stmt.executeQuery("select stalkers from users where user_id="+stalkee_id);
+			results = stmt.executeQuery("select stalkers, stalkees from users where user_id="+curr_user_id);
 			if(results.next()){
 				popularity = Tools.Log2(2.0+(results.getInt("stalkers")+1));
 				//increment the stalkers and update the user popularity
-				stmt.executeUpdate("update users set stalkers="+(results.getInt("stalkers")+1)
+				stmt.executeUpdate("update users set stalkees="+(results.getInt("stalkees")+1)
 						+ ", popularity="+popularity
-						+"where user_id="+stalkee_id);
+						+"where user_id="+curr_user_id);
 			}
 			//make the relationship in the stalker table
 			stmt.executeUpdate("insert into stalker(stalker,stalkee,stalkee_id) values('"+stalker+"', '"+stalkee+"',"

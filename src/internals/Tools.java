@@ -67,9 +67,14 @@ public class Tools {
 	    while(results.next()) {
 	       writer.beginObject();
 	       // generates name:value json pairs
-	       for(int i=1,col=meta.getColumnCount(); i<=col; i++) {
+	      // System.err.println("result set: \n------------------------------");
+	       for(int i=1,col=meta.getColumnCount(); i<=col; i++) 
+	    	   {
+	    	
 	         writer.name(meta.getColumnLabel(i));
+	    //     System.err.print(meta.getColumnLabel(i)+" ");
 	         writer.value(results.getString(i));
+	     //    System.err.println(results.getString(i));
 	       }
 	       writer.endObject();
 	    }

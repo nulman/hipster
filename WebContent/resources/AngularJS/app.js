@@ -10,21 +10,33 @@ function getName(VarSearch) {
 	    }	    
 }
 
+function getLast() {
+
+	 var url = window.location.href;
+	 window.alert(href.substr(url.lastIndexOf('/') + 1));
+}
+
 (function(){
 	
 //main module
 	var app = angular.module('Hipster', [ 'ngSanitize']);
 	
 	//UserController- used in all pages- queries for the current user's details
-	app.controller('UserController',['$http', function($http){	
+	app.controller('UserController',['$http','$scope', function($http,$scope){	
 
 		var user= this;
 		user.details=[];
+
 		
 		//fetching the current user's information from the server
 		$http.post('user','me').success(function(data){
 			user.details= data[0];
 		});
+		
+		$scope.reset= function(){
+			$scope.newform.$setPristine();
+		};
+
 	
 	}]);
 	
@@ -81,12 +93,15 @@ function getName(VarSearch) {
 	}]);
 	
 	//DiscoverController- used in the Discover page- queries for the top 10 posts of all users
-	app.controller('DiscoverController',['$scope','$interval','$http', function($scope,$interval,$http){	
+	app.controller('DiscoverController',['$scope','$interval','$log','$http', function($scope,$interval,$log,$http){	
 
 		var discover= this;
-		discover.messages=[];
+		discover.messages1=[];
+		discover.messages2=[];
 		discover.showreply= [false];
 		discover.showrepublish= [false];
+		
+		$scope.inchecbox= false;
 
 		$http.post('Discover','all,popularity,0').success(function(data){
 			discover.messages= data;
@@ -95,12 +110,23 @@ function getName(VarSearch) {
 		$scope.refresh= function(){
 			
 			stop= $interval(function(){
+			$http.post('Discover','me,popularity,0').success(function(data){
+				discover.messages1= data;
+			});
+				
 			$http.post('Discover','all,popularity,0').success(function(data){
-				discover.messages= data;
+				discover.messages2= data;
 			});
 			}, 2000);
+	
 		};
 		
+		$scope.toggle= function(){
+			$scope.inchecbox= !$scope.inchecbox;
+		};
+
+
+		///
 		$scope.pause = function() {
 	          
 	        $interval.cancel(stop);
@@ -131,6 +157,62 @@ function getName(VarSearch) {
 		
 	}]);
 	
+
+	//TopicController- used in topic pages, queries for the latest 10 messages who contain a specific topic
+	app.controller('TopicController',['$scope','$interval','$http', function($scope,$interval,$http){	
+
+		var topic= this;
+		topic.messages=[];
+		topic.showreply= [false];
+		topic.showrepublish= [false];
+		
+		var searchtopic= getName("topic")
+
+		$http.post('topic',searchtopic).success(function(data){
+			topic.messages= data;
+		});
+		
+		$scope.refresh= function(){
+			
+			stop= $interval(function(){
+			$http.post('topic',searchtopic).success(function(data){
+				topic.messages= data;
+			});
+			}, 2000);
+		};
+		
+		$scope.pause = function() {
+	          
+	        $interval.cancel(stop);
+	        stop = undefined;
+	           
+	        };
+	        
+	        
+	    $scope.togglereply= function($index){
+	    	if(topic.showreply[$index]==false){
+	    		$scope.pause();
+	    		topic.showreply[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		topic.showreply[$index]=false;
+	    	}
+	    };
+	    
+	    $scope.togglerepublish= function($index){
+	    	if(topic.showrepublish[$index]==false){
+	    		$scope.pause();
+	    		topic.showrepublish[$index]=true;
+	    	}else{
+	    		$scope.refresh();
+	    		topic.showrepublish[$index]=false;
+	    	}
+	    };
+		
+	}]);
+	
+
+	
 	//ProfileController- used in user profile pages- queries for the user details and latest 10 posts
 	app.controller('ProfileController',['$scope','$interval','$http', function($scope,$interval,$http){	
 
@@ -141,6 +223,7 @@ function getName(VarSearch) {
 		profile.showrepublish= [false];
 		
 		var name= getName("nickname");
+		//var name= getLast();
 		
 		$http.post('user',name).success(function(data){
 			profile.details= data[0];
@@ -188,89 +271,75 @@ function getName(VarSearch) {
 	    		profile.showrepublish[$index]=false;
 	    	}
 	    };
+	    
+	    $scope.reset= function(){
+	    	$scope.replytxt = "@somthing";
+	    }
 		
 		
 	}]);
 	
-	
-	//FollowersController- used in /followers/user pages, queries for the user's details and the top 10 followers
-	app.controller('FollowersController',function(){
-		var followers= this;
-		followers.followers=[];
+	//FormController
+	app.controller('FormController',function(){
 		
-		var name= getName("nickname");		
+		profile.showreply= [false];
+		profile.showrepublish= [false];
 		
-		$http.post('followers',name).success(function(data){
-			followers.followers= data;
-		});
-	
-	});
-	
-	//FollowingController- used in /following/user pages, queries for the user's details and the top 10 users who User is following
-	app.controller('FollowingController',function(){
-		var following= this;
-		following.following=[];
-		
-		var name= getName("nickname");
-		
-		$http.post('following',name).success(function(data){
-			following.following= data;
-		});
-	
-	});
-	
-	//TopicController- used in topic pages, queries for the latest 10 messages who contain a specific topic
-	app.controller('TopicController',['$scope','$interval','$http', function($scope,$interval,$http){	
-
-		var topic= this;
-		topic.messages=[];
-		topic.showreply= [false];
-		topic.showrepublish= [false];
-		
-		var topic= getName("topic");
-		var request= "#"+topic;
-
-		$http.post('Topic',request).success(function(data){  //get actual post method
-			topic.messages= data;
-		});
-		
-		$scope.refresh= function(){
-			
-			stop= $interval(function(){
-			$http.post('Topic',request).success(function(data){//same
-				topic.messages= data;
-			});
-			}, 2000);
-		};
-		
-		$scope.pause = function() {
-	          
-	        $interval.cancel(stop);
-	        stop = undefined;
-	           
-	        };
-	        
-	        
-	    $scope.togglereply= function($index){
-	    	if(topic.showreply[$index]==false){
+		$scope.togglereply= function($index){
+	    	if(profile.showreply[$index]==false){
 	    		$scope.pause();
-	    		topic.showreply[$index]=true;
+	    		profile.showreply[$index]=true;
 	    	}else{
 	    		$scope.refresh();
-	    		topic.showreply[$index]=false;
+	    		profile.showreply[$index]=false;
 	    	}
 	    };
 	    
 	    $scope.togglerepublish= function($index){
-	    	if(topic.showrepublish[$index]==false){
+	    	if(profile.showrepublish[$index]==false){
 	    		$scope.pause();
-	    		topic.showrepublish[$index]=true;
+	    		profile.showrepublish[$index]=true;
 	    	}else{
 	    		$scope.refresh();
-	    		topic.showrepublish[$index]=false;
+	    		profile.showrepublish[$index]=false;
 	    	}
 	    };
+	    
+	    $scope.reset= function(){
+	    	$scope.user = angular.copy($scope.master);
+	    }
+	});
+	
+	
+	//FollowersController- used in /followers/user pages, queries for the user's details and the top 10 followers
+	app.controller('FollowersController',['$scope','$http', function($scope,$http){
 		
+		var followers= this;
+		followers.followers=[];
+		
+		var name= getName("nickname");
+		
+		$http.post('followers',name).success(function(data){
+			followers.followers= data;
+		});
+		
+	
+	}]);
+	
+	//FollowingController- used in /following/user pages, queries for the user's details and the top 10 users who User is following
+	app.controller('FollowingController',['$scope','$http', function($scope,$http){
+		
+		var following= this;
+		following.followings=[];
+		
+		var name= getName("nickname");
+		var string= name+",1"
+		
+		$http.post('following',string).success(function(data){
+			following.followings= data;
+		});
+		
+	
 	}]);
 	
 	
@@ -301,7 +370,7 @@ function getName(VarSearch) {
 			    if (days < 1) {
 			        return hours + (hours > 1 ? ' hours ago' : ' hour ago');
 			    }
-			    return stamp.substring(0, stamp.length - 3);
+			    return stamp.substring(0, stamp.length - 3);;
 
 		  };
 		});

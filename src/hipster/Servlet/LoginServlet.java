@@ -1,33 +1,26 @@
 package hipster.Servlet;
 
-import internals.Constants;
 import internals.Tools;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Enumeration;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.SingleThreadModel;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.core.StandardServer;
-
 /**
  * Servlet implementation class LoginServlet
  */
 @SuppressWarnings("deprecation")
-@WebServlet("/LoginServlet")
+//@WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
@@ -93,8 +86,9 @@ public class LoginServlet extends HttpServlet implements SingleThreadModel{
 				
 				session.setMaxInactiveInterval(60*30);
 
-	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/mainPage.html");
-	            rd.include(request, response);
+	            //RequestDispatcher rd = getServletContext().getRequestDispatcher("/mainPage.html");
+	            //rd.include(request, response);
+				response.sendRedirect("/Hipster"); 
 	            out.close();
 	          //close DB connection
 	            stmt.close();

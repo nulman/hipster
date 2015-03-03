@@ -143,7 +143,7 @@ a:hover, a:visited, a:link, a:active
 	max-height:50px;
 }
 
-.follow,.timesrepublished{
+.follow{
 	float: right;
 	//vertical-align: middle;
 }
@@ -156,9 +156,18 @@ a:hover, a:visited, a:link, a:active
 	resize:vertical;
 }
 
-#followbtn{
-	background-color: rgba(70, 60, 50, 0.4); 
+#followbtn,.followbtn{
+	background-color: transparent; 
 	float:right;
+	display:inline-block;
+}
+
+.timesrepublished{
+	margin-left: 5%;
+}
+
+input[type=checkbox]{
+	transform: scale(1.5);
 }
 
 

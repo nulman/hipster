@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.SingleThreadModel;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class Following
  */
 @SuppressWarnings("deprecation")
-@WebServlet({"/following","/following/*"})
+//@WebServlet({"/following","/following/*"})
 public class Following extends HttpServlet implements SingleThreadModel{
 	private static final long serialVersionUID = 1L;
        
@@ -48,7 +48,7 @@ public class Following extends HttpServlet implements SingleThreadModel{
 					+nickname+"'");
 			System.err.println("query successfull");
 			if(results.next()){
-				response.sendRedirect("/Hipster/profile.html?nickname=\""+nickname+"\"");
+				response.sendRedirect("/Hipster/following.html?nickname="+nickname);
 			}else{
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}
@@ -65,18 +65,20 @@ public class Following extends HttpServlet implements SingleThreadModel{
 		Statement stmt = null;
 		ResultSet results = null;
 		String amount = null;
-		
+		String temp = Tools.RequestToString(request);
+		String [] req =temp.split(",");
 		try{
-			if(request.getParameter("flag").length()<2){
+			System.err.println("follwing request: "+temp);
+			if(req[1].length()<2){
 				amount = "order by users.popularity desc fetch first 10 rows only";
 			}
 			
 			conn = Tools.getConnection();
 			stmt = conn.createStatement();
 			
-			results = stmt.executeQuery("select stalker.stalkee from stalker join users on "
+			results = stmt.executeQuery("select stalker.stalkee, users.nickname, users.pic from stalker join users on "
 					+"stalker.stalkee=users.nickname where stalker.stalker='"
-			+Tools.RequestToString(request)+"' "+amount+" ");
+			+req[0]+"' "+amount+" ");
 			Tools.ResSetToJSONRes(response, results);
 			stmt.close();
 			conn.close();

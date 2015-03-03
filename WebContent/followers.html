@@ -14,37 +14,47 @@
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
 </head>
 
-<body data-ng-controller="UserController as user">
+<body data-ng-controller="ProfileController as profile">
 
 <div class="container">
 
 		<div class="row">
 		
-			<div class="col-sm-3">
+			<div class="col-sm-12" data-ng-controller="UserController as user">
+				<a href="/Hipster/mainPage.html"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
+				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
+				
+				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
+				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
+				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
+			</div>
+		
+			<div class="col-sm-4">
 				<div class="userdetails">
-					<a href="/users/{{user.details.NICKNAME}}" class="mainnickname"><h1>@{{user.details.NICKNAME}}</h1></a>
+					<a href="/users/{{profile.details.NICKNAME}}" class="mainnickname"><h1>@{{profile.details.NICKNAME}}</h1></a>
 					<br>
 					<h3 id=rank>Hipster Rank: #{{user.details.USER_ID}}</h3>
 					<br><br>
 					
-				    <img class="mainavatar" data-ng-src="{{user.details.PIC}}" alt="main user avatar">
-					
-				        <p>
+				    <img class="mainavatar" data-ng-src="{{profile.details.PIC}}" alt="main user avatar">
+
 				        	<br>
-				            With <a data-ng-href="followers/{{user.details.NICKNAME}}" >{{user.details.STALKERS}}  Followers </a>,   
+				            With <a data-ng-href="followers/{{profile.details.NICKNAME}}" >{{profile.details.STALKERS}}  Followers </a>,   
 				            <br>
-				            <a data-ng-href="following/{{user.details.NICKNAME}}" >Following {{user.details.STALKEES}}</a> other Hipsters.
+				            <a data-ng-href="following/{{profile.details.NICKNAME}}" >Following {{profile.details.STALKEES}}</a> other Hipsters.
 				            <br><br>
 				            
 				            <div class="description">
 				            <b>About Me:</b><br>
-				            <cite>{{user.details.DESCRIPTION}}</cite>
+				            <cite>{{profile.details.DESCRIPTION}}</cite>
 				            </div>
-				            
-				        </p>
-				        
-				   <a data-ng-href="/users/{{user.messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
-				   <br>
+			        			        
+						   	<!-- follow button -->	
+					  		<form action="Follow" method="post">
+					  			<input type="hidden" name="nickname"  value="{{profile.details.NICKNAME}}"/>
+								<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
+					  		</form>   
+						   <br>
 				</div>
 			</div>
 		
@@ -55,10 +65,16 @@
 			
 				<div class="followers"  data-ng-repeat="followers in follower.followers|limitTo:10"> 
 			  		
+			  		<!-- follow button -->	
+					  		<form action="Follow" method="post">
+					  			<input type="hidden" name="nickname"  value="{{followers.NICKNAME}}"/>
+								<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
+					  		</form>   
+						 						   
 			  		<img class="avatar" data-ng-src="{{followers.PIC}}" align="bottom" alt="avatar">
-			  		<h3><a data-ng-href="/users/{{followers.NICKNAME}}" class="nickname">@{{followers.NICKNAME}}</a></h3>
-			  		<a data-ng-href="/users/{{followers.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
-
+			  		<h3><a data-ng-href="user/{{followers.NICKNAME}}" class="nickname">@{{followers.NICKNAME}}</a></h3>
+			  		
+					<br>
 				</div>
 				
 			</div>	

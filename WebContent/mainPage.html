@@ -20,23 +20,14 @@
 <div class="container">
 		
 		<div class="row">
-		<!-- 
-   			<nav class="navbar-inner">
-   				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
-				<h3 class="navbar-text"><a href="/discover" class="navbar-link">Discover</a></h3>
-				<h3 class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></h3>
-  			 </nav>
-		 -->
+<!-- nav bar -->
 		 	<div class="col-sm-12">
-				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
-				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
+				<a href="/Hipster/mainPage.html"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
+				<h3 class="navbar-text"><a href="/Hipster/discover.html" class="navbar-link">Discover</a></h3>
 				
 				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
-				<!-- 
-				<h3 class="navbar-text navbar-right"><form action="Logout" method="post" class="logout"><input type="submit" value="Logout"></form></h3>
-				-->
 			</div>
 
 			<div class="col-sm-4">
@@ -47,24 +38,30 @@
 					
 					<h3>Something on your mind?:</h3>
 					<br>
-					<form action="Post" method="post" class="newpost">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
+					<form action="Post" method="post" class="newpost" name="newform" data-ng-submit="reset()">
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140" data-ng-model="txtarea"></textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value="0" />
 							<br><br>
-							<button class="btn btn" >Submit</button>
+							<button class="btn btn">Submit</button>
 				    </form>
 				</div>
 			</div>
-		
+ 		
 			<div class="col-sm-8" data-ng-controller="MainController as main"  data-ng-init="refresh()">
 			<br>
 				<div class="usermessages" data-ng-repeat="messages in main.messages|limitTo:10"> 
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
 			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="" class="timesrepublished"><h4>Rebuplished #{{messages.TIMES_REPUBLISHED}} times</h4></a>
-			  		<a data-ng-href="/Hipster/user/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+			  		<a data-ng-href="" class="timesrepublished"><h4>{{messages.TIMES_REPUBLISHED}} times republished</h4></a>
+			  		
+			  		<!-- follow button -->	
+			  		<form action="Follow" method="post">
+			  			<input type="hidden" name="nickname"  value="{{messages.NICKNAME}}"/>
+						<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
+			  		</form>
+			  		
 			  		<br><br>
 			  		<div class="textcontent">
 				  		<span data-ng-bind-html="messages.TEXT"></span>
@@ -75,7 +72,7 @@
 			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="main.showreply[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
 							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
@@ -85,9 +82,9 @@
 			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="main.showrepublish[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  data-ng-value="0" />
-							<input type="hidden" name="republish"  data-ng-value={{messages.MID}} />
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
+							<input type="hidden" name="reply_to"  value="0" />
+							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>
 							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
 			  		</form>
@@ -98,6 +95,7 @@
 				</div>
 				
 			</div>	
+			
 		</div>
 </div>
 

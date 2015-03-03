@@ -2,17 +2,14 @@ package hipster.Servlet;
 
 import internals.Tools;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Enumeration;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.SingleThreadModel;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class UserPage
  */
 @SuppressWarnings("deprecation")
-@WebServlet({"/user/*", "/user"})
+//@WebServlet({"/user/*", "/user"})
 public class UserPage extends HttpServlet implements SingleThreadModel {
 	private static final long serialVersionUID = 1L;
        
@@ -53,8 +50,9 @@ public class UserPage extends HttpServlet implements SingleThreadModel {
 			System.err.println("query successfull");
 			if(results.next()){
 				//rd = getServletContext().getRequestDispatcher("/profile.html?nickname="+nickname);
-	           // rd.include(request, response);
-				response.sendRedirect("/Hipster/profile.html?nickname="+nickname);
+				//rd.forward(request, response);
+	            //rd.include(request, response);
+				response.sendRedirect("/Hipster/profile.html?nickname="+nickname); 
 			}else{
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}

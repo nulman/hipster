@@ -14,11 +14,11 @@
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
 </head>
 
-<body data-ng-controller="ProfileController as profile">
+<body data-ng-controller="ProfileController as profile" data-ng-controller="UserController as user">
 <div class="container">
 		<div class="row">
 			
-			<div class="col-sm-12" data-ng-controller="UserController as user">
+			<div class="col-sm-12">
 				<a href="/Hipster/mainPage.html"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
 				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
 				
@@ -28,7 +28,7 @@
 			</div>
 
 		
-			<div class="col-sm-4">
+			<div class="col-sm-4" >
 				<div class="userdetails">
 					<a href="user/{{profile.details.NICKNAME}}" class="mainnickname"><h1>@{{profile.details.NICKNAME}}</h1></a>
 					<br>
@@ -37,10 +37,24 @@
 					
 				    <img class="mainavatar" data-ng-src="{{profile.details.PIC}}" alt="main user avatar">
 					
-				        <p>
+				        
 				        	<br>
-				            With <a data-ng-href="followers/{{profile.details.NICKNAME}}" >{{profile.details.STALKERS}}  Followers </a>,   
+				            With <a data-ng-href="followers/{{profile.details.NICKNAME}}">{{profile.details.STALKERS}}  Followers </a>,   
 				            <br>
+				        <!-- hidden followers field 
+				         With <a href="" data-ng-click="togglefollowers()">{{profile.details.STALKERS}}  Followers </a>    
+				            <div class="followerspage"  data-ng-show="followers.showfollowers">
+				            	
+								<div class="followers"  data-ng-repeat="followers in follower.followers|limitTo:10"> 
+							  		
+							  		<img class="avatar" data-ng-src="{{followers.PIC}}" align="bottom" alt="avatar">
+							  		<h3><a data-ng-href="/users/{{followers.NICKNAME}}" class="nickname">@{{followers.NICKNAME}}</a></h3>
+							  		<a data-ng-href="/users/{{followers.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
+				
+								</div>
+
+				            </div>
+				         -->    
 				            <a data-ng-href="following/{{profile.details.NICKNAME}}" >Following {{profile.details.STALKEES}}</a> other Hipsters.
 				            <br><br>
 				            
@@ -49,57 +63,63 @@
 				            <cite>{{profile.details.DESCRIPTION}}</cite>
 				            </div>
 				            
-				        </p>
-				        
-				   <a data-ng-href="user/{{profile.details.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4> Follow</h4></span></a>   
+				   <!-- follow button -->	
+			  		<form action="Follow" method="post">
+			  			<input type="hidden" name="nickname"  value="{{profile.details.NICKNAME}}"/>
+						<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
+			  		</form>
+			  		<br>  
 				   <br>
 				</div>
 			</div>
 		
 		
 			<div class="col-sm-8">
+			<br>
 			<h1>Previous Messages:</h1>
-			
 			<br>
 				<div class="usermessages" data-ng-repeat="messages in profile.messages|limitTo:10"> 
-			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
-
-			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="" class="timesrepublished"><h4> Rebuplished #{{messages.TIMES_REPUBLISHED}} times</h4></a>
-			  		<a data-ng-href="/Hipster/user/{{messages.NICKNAME}}/follow" class="follow"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></a>
-			  	
-			  	<!-- follow button -->	
+				
+					<!-- follow button -->	
 			  		<form action="Follow" method="post">
 			  			<input type="hidden" name="nickname"  value="{{messages.NICKNAME}}"/>
 						<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
 			  		</form>
 			  		
+			  		
+			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
+
+			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3> 		
+			  		
+			  		
 			  		<br><br>
-			  		<div class="textcontent" data-ng-bind-html-unsafe="message.TEXT">
+			  		<div class="textcontent">
 				  		<span data-ng-bind-html="messages.TEXT"></span>
 				  		{{message}}
 				 	</div>
 			 	 <br>
 			 	 
-			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
+			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">#{{messages.TIMES_REPUBLISHED}} Reply</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="profile.showreply[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
+				            <textarea data-ng-model="replytxt" name="text" class="messagetext" rows="5" maxlength="140" >@{{messages.NICKNAME}} </textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
 							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
-							<button class="btn btn" data-ng-click="togglereply($index)" >Submit</button>
+							<button class="btn btn" data-ng-click="togglereply($index); reset()" >Submit</button>
 			  		</form>
 			  		
-			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
+			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">#{{messages.TIMES_REPUBLISHED}} Republish</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="profile.showrepublish[$index]">
 				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>
-							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
+							<button class="btn btn" data-ng-click="togglerepublish($index); reset()" >Submit</button>
 			  		</form>
+			  		
+			  	<a data-ng-href="" class="timesrepublished">republished  times</a>
 				
 			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
 			  	<br>
