@@ -75,24 +75,25 @@ public class SignUp extends HttpServlet implements SingleThreadModel{
 			}
 			//make sure the user isnt trying to sign up with reserved names
 			if(internals.Constants.Illegal_Names.contains(username)){
-				out.println("<div><font size=20>the name "+username+" is already taken</font></div>");
+				out.println("<div class="+"'response'>"+"the username "+username+" is already taken</div>");
 			}else if(internals.Constants.Illegal_Names.contains(username)){
-				out.println("<div><font size=20>the name "+nickname+" is already taken</font></div>");
+				out.println("<div class="+"'response'>"+"the nickname "+nickname+" is already taken</div>");
 			}
 			//username already exists
 			else if(results.next()){
-				out.println("<div><font size=20>the name "+username+" is already taken</font></div>");
+				out.println("<div class="+"'response'>"+"the username "+username+" is already taken</div>");
 			}
 			//username already exists
 			else if(results2.next()){
-				out.println("<div><font size=20>the name "+nickname+" is already taken</font></div>");
+				out.println("<div class="+"'response'>"+"the nickname "+nickname+" is already taken</div>");
 			}else{
 				//this is indeed a new user
 				System.err.println("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
 						+password+"', '"+nickname+"', '"+pic+"', '"+description+"')");
 					stmt.execute("insert into users(username, password, nickname, pic, description) values('"+username+"', '"
 						+password+"', '"+nickname+"', '"+pic+"', '"+description+"')");
-					out.println("<div><font size=20>registration successful! please log in to continue</font></div>");
+					out.println("<div class="+"'response'>"+"registration successful! please log in to continue"+"</div>");
+					
 
 			}
 			stmt.close();

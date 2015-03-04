@@ -51,21 +51,6 @@ function showrandom() {
 			user.details= data[0];
 			$rootScope.userdetails= data[0];
 		});
-		
-		/*
-		string= user.details.NICKNAME +",11";
-		
-		//fetching the current user's 'following' list - used in show/hide of 'follow' button
-		$http.post('following',string).success(function(data){
-			user.follows= data;
-		});
-		
-		//$scope.valid= checkvalid('nick',follows);
-		
-		$scope.reset= function(){
-			$scope.newform.$setPristine();
-		};
-		*/
 
 	}]);
 

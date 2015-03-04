@@ -53,11 +53,11 @@
 				            <cite>{{profile.details.DESCRIPTION}}</cite>
 				            </div>
 				            
-				   <!-- follow button -->	
-			  		<form action="Follow" method="post" data-ng-show="valid">
-			  			<input type="hidden" name="nickname"  value="{{profile.details.NICKNAME}}"/>
-						<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
-			  		</form>
+				   	<!-- follow button -->	
+					  		<form action="Follow" method="post" onsubmit="return followOk()">
+					  			<input type="hidden" name="nickname"  value="{{profile.details.NICKNAME}}"/>
+								<button class="btn btn" id= "followbtn"><span id="folsuccess" class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
+					  		</form> 
 			  		<br>  
 				   <br>
 				</div>

@@ -176,6 +176,14 @@ input[type=checkbox]{
 	resize: none;
 }
 
+.response{
+	background-color: #1e1b17;
+	font-weight: bold;
+	font-size: 2em;
+	text-align: center;
+	color: white;
+}
+
 
 
 

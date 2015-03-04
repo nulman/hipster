@@ -68,7 +68,8 @@
 			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="topic.showreply[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
+			  		@{{messages.NICKNAME}}
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
 							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
