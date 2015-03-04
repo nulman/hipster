@@ -12,21 +12,24 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script type="text/javascript" src="resources/AngularJS/app.js"></script>
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
+  <script type="text/javascript" src="resources/AngularJS/javascript.js"></script>
 </head>
 
-<body data-ng-controller="ProfileController as profile" data-ng-controller="UserController as user">
+<body data-ng-controller="ProfileController as profile" >
 
 <div class="container">
 
 		<div class="row">
 		
-			<div class="col-sm-12" >
+			<div class="col-sm-12" data-ng-controller="UserController as user">
 				<a href="/Hipster/mainPage.html"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
 				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
 				
 				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
+				<br>
+				<h3 id="quote" onclick="showrandom1()">Real hipsters don't wear plaids</h3>
 			</div>
 		
 			<div class="col-sm-4">

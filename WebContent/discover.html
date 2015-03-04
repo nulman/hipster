@@ -12,6 +12,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script type="text/javascript" src="resources/AngularJS/app.js"></script>
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
+  <script type="text/javascript" src="resources/AngularJS/javascript.js"></script>
 </head>
 
 <body data-ng-controller="UserController as user">
@@ -19,14 +20,19 @@
 <div class="container">
 		
 		<div class="row">
-<!-- nav bar -->
+<!-- header -->
 		 	<div class="col-sm-12">
 				<a href="/Hipster/mainPage.html"><img src="resources/images/discoverlogosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
 				<h3 class="navbar-text"><a href="/Hipster/discover.html" class="navbar-link">Discover</a></h3>
 				
+				
 				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
+
+				<br>
+				<h3 id="quote" onclick="showrandom1()">Real hipsters don't wear plaids</h3>
+
 			</div>
 <!-- user details -->
 			<div class="col-sm-3">
@@ -60,7 +66,7 @@
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
 			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="" class="timesrepublished"><h4>Rebuplished #{{messages.TIMES_REPUBLISHED}} times</h4></a>
+			  		
 			  		
 			  		<br><br>
 			  		<div class="textcontent">
@@ -88,6 +94,8 @@
 							<br><br>
 							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
 			  		</form>
+			  		
+			  	<a data-ng-href="" class="timesrepublished">(with #{{messages.TIMES_REPUBLISHED}} republishes)</a>
 				
 			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
 			  	<br>
@@ -107,7 +115,7 @@
 			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
 
 			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="" class="timesrepublished"><h4>Rebuplished #{{messages.TIMES_REPUBLISHED}} times</h4></a>
+			 
 			  		
 			  		<br><br>
 			  		<div class="textcontent">
@@ -135,6 +143,8 @@
 							<br><br>
 							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
 			  		</form>
+				
+				<a data-ng-href="" class="timesrepublished">(with #{{messages.TIMES_REPUBLISHED}} republishes)</a>
 				
 			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
 			  	<br>

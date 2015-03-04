@@ -1,6 +1,7 @@
 package hipster.Servlet;
 
 import internals.Tools;
+import internals.Constants;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -44,6 +45,7 @@ public class Post extends HttpServlet implements SingleThreadModel{
 		//POSTS(owner integer, mid, stamp TIMESTAMP ,replyto integer default null, 
 				//republished int default 0,text varchar(140))
 		//disect the request to get republish#, text, cookie.username
+		request.setCharacterEncoding(Constants.ENCONDING);
 		int republish_id = 0;
 		Connection conn = null;
 		String text=null;

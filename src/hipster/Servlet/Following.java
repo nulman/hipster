@@ -64,11 +64,11 @@ public class Following extends HttpServlet implements SingleThreadModel{
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet results = null;
-		String amount = null;
-		String temp = Tools.RequestToString(request);
+		String amount = " ";
+		String temp = Tools.RequestToString(request).toString();
 		String [] req =temp.split(",");
 		try{
-			System.err.println("follwing request: "+temp);
+			System.err.println("follwing request: "+temp.toUpperCase());
 			if(req[1].length()<2){
 				amount = "order by users.popularity desc fetch first 10 rows only";
 			}

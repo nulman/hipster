@@ -45,11 +45,11 @@ public class AuthFilter implements Filter,  SingleThreadModel {
 		HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
-        System.err.println("*******in filter: "+uri.toString());
+        //System.err.println("*******in filter: "+uri.toString());
          
         HttpSession session = req.getSession(false);
         if(session!=null){
-        	System.err.println("++++++++found a session: "+session.getAttribute("username"));
+        	//System.err.println("++++++++found a session: "+session.getAttribute("username"));
     		chain.doFilter(request, response);
     		return;
         }
@@ -65,11 +65,11 @@ public class AuthFilter implements Filter,  SingleThreadModel {
 	        	}
 	        }
 	    }*/
-	    System.err.println("------+no cookie: "+uri.toString());
+	   // System.err.println("------+no cookie: "+uri.toString());
 	    if(uri.endsWith("login.html") || uri.endsWith("LoginSuccess.jsp") || uri.endsWith("LoginServlet") 
 	    		|| uri.endsWith("angular.min.js") || uri.endsWith(".css") || uri.contains("/resources/") 
 	    		|| uri.endsWith("app.js") || uri.endsWith("SignupServlet")){
-	    	System.err.println("------++:no session: "+uri.toString());
+	    	//System.err.println("------++:no session: "+uri.toString());
 	    	chain.doFilter(request, response);
 	    	return;
 	    }else{

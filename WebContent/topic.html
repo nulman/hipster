@@ -12,7 +12,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script type="text/javascript" src="resources/AngularJS/app.js"></script>
   <script type="text/javascript" src="https://code.angularjs.org/1.2.26/angular-sanitize.js"></script>
-  <script type="text/javascript" src="resources/AngularJS/jQuery.js"></script>
+  <script type="text/javascript" src="resources/AngularJS/javascript.js"></script>
 </head>
 
 <body data-ng-controller="UserController as user">
@@ -28,42 +28,35 @@
 				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
+				<br>
+				<h3 id="quote" onclick="showrandom1()">Real hipsters don't wear plaids</h3>
 			</div>
-
+<!-- user details -->
 			<div class="col-sm-3">
 				<div class="userdetails">
 					<img class="avatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 					<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
 					<br><br>
 					
-					<h3>Something on your mind?:</h3>
-					<br>
-					<form action="Post" method="post" class="newpost">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
-							<input type="hidden" name="reply_to"  value="0" />
-							<input type="hidden" name="republish"  value="0" />
-							<br><br>
-							<button class="btn btn" >Submit</button>
-				    </form>
+					
 				</div>
 			</div>
-			
+<!-- topic messages -->			
 			<div class="col-sm-8" data-ng-controller="TopicController as topic"  data-ng-init="refresh()">
 			<br>
 			<h1>Topic search results:</h1>
 			<br>
-				<div class="usermessages" data-ng-repeat="messages in topic.messages|limitTo:10"> 
-			  				  		
-			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
-
-			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
-			  		<a data-ng-href="" class="timesrepublished"><h4>{{messages.TIMES_REPUBLISHED}} times republished</h4></a>
-			  		
+				<div class="usermessages" data-ng-repeat="messages in topic.messages|limitTo:10" data-ng-hide="incheckbox"> 
 			  		<!-- follow button -->	
 			  		<form action="Follow" method="post">
 			  			<input type="hidden" name="nickname"  value="{{messages.NICKNAME}}"/>
 						<button class="btn btn" id= "followbtn"><span class="glyphicon glyphicon-plus"><h4>Follow</h4></span></button>
 			  		</form>
+			  		
+			  		<img class="avatar" data-ng-src="{{messages.PIC}}" align="bottom" alt="avatar">
+
+			  		<h3><a data-ng-href="/Hipster/user/{{messages.NICKNAME}}" class="nickname">@{{messages.NICKNAME}}</a> wrote:</h3>
+			 
 			  		
 			  		<br><br>
 			  		<div class="textcontent">
@@ -91,6 +84,8 @@
 							<br><br>
 							<button class="btn btn" data-ng-click="togglerepublish($index)" >Submit</button>
 			  		</form>
+				
+				<a data-ng-href="" class="timesrepublished">(with #{{messages.TIMES_REPUBLISHED}} republishes)</a>
 				
 			  	<span class="timestamp">{{messages.STAMP|timeago}}</span>
 			  	<br>

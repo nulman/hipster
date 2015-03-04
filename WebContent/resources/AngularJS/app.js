@@ -16,13 +16,31 @@ function getLast() {
 	 window.alert(href.substr(url.lastIndexOf('/') + 1));
 }
 
+function checkvalid(nick,follows){
+	return (follows.indexOf(nick) > -1);
+}
+
+
+function showrandom() {
+    var quotes = ["you're special because you like sepia tones, thick rim glasses and soy milk", 
+                  "does following other people make you less or more hipster?", 
+                  "does it come in plaid?",
+                  "do you also drink cofffee before it's cool?  cause that's dangerous",
+                  "try a sepia filter.  everything looks better with a sepia filter",
+                  "social networks?  so mainstream..",
+                  "republish? really? you can't make your own special commentary about the monarch butterfly's mating habits?",
+                  "this will look great with a bit of blur and some deep inspirational quote in helvetica"];
+    var quote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("quote").innerHTML = quote;
+  };
+
 (function(){
 	
 //main module
 	var app = angular.module('Hipster', [ 'ngSanitize']);
 	
 	//UserController- used in all pages- queries for the current user's details
-	app.controller('UserController',['$http','$scope', function($http,$scope){	
+	app.controller('UserController',['$http','$scope','$rootScope', function($http,$scope,$rootScope){	
 
 		var user= this;
 		user.details=[];
@@ -31,15 +49,26 @@ function getLast() {
 		//fetching the current user's information from the server
 		$http.post('user','me').success(function(data){
 			user.details= data[0];
+			$rootScope.userdetails= data[0];
 		});
+		
+		/*
+		string= user.details.NICKNAME +",11";
+		
+		//fetching the current user's 'following' list - used in show/hide of 'follow' button
+		$http.post('following',string).success(function(data){
+			user.follows= data;
+		});
+		
+		//$scope.valid= checkvalid('nick',follows);
 		
 		$scope.reset= function(){
 			$scope.newform.$setPristine();
 		};
+		*/
 
-	
 	}]);
-	
+
 	
 	//MainController- used in the Main page- queries for the latest 10 posts from users i follow
 	app.controller('MainController',['$scope','$interval','$http', function($scope,$interval,$http){	
@@ -48,7 +77,8 @@ function getLast() {
 		main.messages=[];
 		main.showreply= [false];
 		main.showrepublish= [false];
-		
+			
+				
 		$http.post('Discover','me,latest,0').success(function(data){
 			main.messages= data;
 		});
@@ -59,7 +89,7 @@ function getLast() {
 			$http.post('Discover','me,latest,0').success(function(data){
 				main.messages= data;
 			});
-			}, 5000);
+			}, 2000);
 		};
 		
 		$scope.pause = function() {
@@ -121,10 +151,7 @@ function getLast() {
 	
 		};
 		
-		$scope.toggle= function(){
-			$scope.inchecbox= !$scope.inchecbox;
-		};
-
+		
 
 		///
 		$scope.pause = function() {
@@ -133,6 +160,11 @@ function getLast() {
 	        stop = undefined;
 	           
 	        };
+	        
+	    $scope.toggle= function(){
+			$scope.inchecbox= !$scope.inchecbox;
+			};
+
 	        
 	        
 	    $scope.togglereply= function($index){
@@ -166,7 +198,7 @@ function getLast() {
 		topic.showreply= [false];
 		topic.showrepublish= [false];
 		
-		var searchtopic= getName("topic")
+		var searchtopic= getName("topic");
 
 		$http.post('topic',searchtopic).success(function(data){
 			topic.messages= data;
@@ -333,7 +365,7 @@ function getLast() {
 		following.followings=[];
 		
 		var name= getName("nickname");
-		var string= name+",1"
+		var string= name+",1";
 		
 		$http.post('following',string).success(function(data){
 			following.followings= data;
