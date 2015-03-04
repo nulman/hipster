@@ -19,14 +19,31 @@
 <div class="container">
 
 		<div class="row">
-		
-			<div class="col-sm-12" data-ng-controller="UserController as user">
-				<a href="/Hipster/mainPage.html"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
-				<h3 class="navbar-text"><a href="Discover" class="navbar-link">Discover</a></h3>
+<!-- header -->
+		 	<div class="col-sm-12" data-ng-controller="UserController as user">
+		 	
+		 		<div class="col-sm-4">
+				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
+				<h3 class="navbar-text"><a href="/Hipster/discover.html" class="navbar-link">Discover</a></h3>
+				</div>
 				
+				<div class="col-sm-8">
 				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
+				
+				<form class="navbar-form navbar-left" role="search" onsubmit="location.href='topic/'+ document.getElementById('topicurl').value ; return false;">
+			        <div class="form-group">
+			          <input type="text" class="form-control" id="topicurl" placeholder="Topic Search">
+			        </div>
+			        <button type="submit" class="btn btn-default" ><span class="glyphicon glyphicon-search"></span></button>
+		      	</form>
+				
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
+				</div>
+				
+				<br>
+				<h3 id="quote" onload="showrandom1();">Real hipsters don't wear plaids</h3>
+	
 			</div>
 		
 			<div class="col-sm-4">

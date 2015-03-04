@@ -10,17 +10,6 @@ function getName(VarSearch) {
 	    }	    
 }
 
-function getLast() {
-
-	 var url = window.location.href;
-	 window.alert(href.substr(url.lastIndexOf('/') + 1));
-}
-
-function checkvalid(nick,follows){
-	return (follows.indexOf(nick) > -1);
-}
-
-
 function showrandom() {
     var quotes = ["you're special because you like sepia tones, thick rim glasses and soy milk", 
                   "does following other people make you less or more hipster?", 
@@ -136,9 +125,7 @@ function showrandom() {
 	
 		};
 		
-		
 
-		///
 		$scope.pause = function() {
 	          
 	        $interval.cancel(stop);
@@ -295,39 +282,7 @@ function showrandom() {
 		
 		
 	}]);
-	
-	//FormController
-	app.controller('FormController',function(){
 		
-		profile.showreply= [false];
-		profile.showrepublish= [false];
-		
-		$scope.togglereply= function($index){
-	    	if(profile.showreply[$index]==false){
-	    		$scope.pause();
-	    		profile.showreply[$index]=true;
-	    	}else{
-	    		$scope.refresh();
-	    		profile.showreply[$index]=false;
-	    	}
-	    };
-	    
-	    $scope.togglerepublish= function($index){
-	    	if(profile.showrepublish[$index]==false){
-	    		$scope.pause();
-	    		profile.showrepublish[$index]=true;
-	    	}else{
-	    		$scope.refresh();
-	    		profile.showrepublish[$index]=false;
-	    	}
-	    };
-	    
-	    $scope.reset= function(){
-	    	$scope.user = angular.copy($scope.master);
-	    }
-	});
-	
-	
 	//FollowersController- used in /followers/user pages, queries for the user's details and the top 10 followers
 	app.controller('FollowersController',['$scope','$http', function($scope,$http){
 		

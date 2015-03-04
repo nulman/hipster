@@ -197,6 +197,15 @@ public class Post extends HttpServlet implements SingleThreadModel{
 				//we dont allow empty posts
 				return;
 			}
+			//if this is a reply, prepend the @nickname of the person we are replying to
+			if(reply_to>0){
+				results = stmt.executeQuery("select nickname from users where user_id=(select owner from posts "
+						+ "where mid="+reply_to+")");
+				if(results.next()){
+					text = "@"+ results.getString("nickname") + text + " ";
+					System.err.println(results.getString("nickname"));
+				}
+			}
 			//cuts out all the words in the text that start with @
 			String [] prework = text.split(" ");
 			String mentions = null;
@@ -261,7 +270,8 @@ public class Post extends HttpServlet implements SingleThreadModel{
 			System.err.println();
 			System.err.println("5");
 		}
-				response.sendError(HttpServletResponse.SC_NO_CONTENT);
+				response.sendRedirect("/Hipster"); 
+				//response.sendError(HttpServletResponse.SC_NO_CONTENT);
 				stmt.close();
 				System.err.println("6");
 				//stmt2.close();

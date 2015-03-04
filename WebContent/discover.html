@@ -21,18 +21,30 @@
 		
 		<div class="row">
 <!-- header -->
-		 	<div class="col-sm-12">
-				<a href="/Hipster/mainPage.html"><img src="resources/images/discoverlogosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
+		 	<div class="col-sm-12" data-ng-controller="UserController as user">
+		 	
+		 		<div class="col-sm-4">
+				<a href="/Hipster"><img src="resources/images/logosmall.png" alt="Hipster logo" class="navbarlogo navbar-left"></a>
 				<h3 class="navbar-text"><a href="/Hipster/discover.html" class="navbar-link">Discover</a></h3>
+				</div>
 				
-				
+				<div class="col-sm-8">
 				<img class="topavatar" data-ng-src="{{user.details.PIC}}" align="bottom" alt="avatar">
 				<a href="/Hipster/user/{{user.details.NICKNAME}}" class="mainnickname"><h3>@{{user.details.NICKNAME}}</h3></a>
+				
+				<form class="navbar-form navbar-left" role="search" onsubmit="location.href='topic/'+ document.getElementById('topicurl').value ; return false;">
+			        <div class="form-group">
+			          <input type="text" class="form-control" id="topicurl" placeholder="Topic Search">
+			        </div>
+			        <button type="submit" class="btn btn-default" ><span class="glyphicon glyphicon-search"></span></button>
+		      	</form>
+				
 				<h3 class="navbar-text navbar-right"><a href="Logout" class="navbar-link">Logout</a></h3>
-
+				</div>
+				
 				<br>
-				<h3 id="quote" onclick="showrandom1()">Real hipsters don't wear plaids</h3>
-
+				<h3 id="quote" onload="showrandom1();">Real hipsters don't wear plaids</h3>
+	
 			</div>
 <!-- user details -->
 			<div class="col-sm-3">
@@ -78,7 +90,9 @@
 			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="discover.showreply[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
+			  		<br>
+			  		<b>@{{messages.NICKNAME}}</b>
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
 							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
@@ -88,7 +102,7 @@
 			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="discover.showrepublish[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
+				            <textarea name="text" class="republishmessagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>
@@ -127,7 +141,9 @@
 			 	 <a href="" class="replymessage" data-ng-click="togglereply($index)">Reply</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="discover.showreply[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140">@{{messages.NICKNAME}}</textarea>
+				    <br>
+			  		<b>@{{messages.NICKNAME}}</b>
+				            <textarea name="text" class="messagetext" rows="5" maxlength="140"></textarea>
 							<input type="hidden" name="reply_to"  data-ng-value={{messages.MID}} />
 							<input type="hidden" name="republish"  data-ng-value="0" />
 							<br><br>
@@ -137,7 +153,7 @@
 			  	<a href="" class="rebuplishmessage" data-ng-click="togglerepublish($index)">Republish</a>
 			  
 			  		<form action="Post" method="post" data-ng-show="discover.showrepublish[$index]">
-				            <textarea name="text" class="messagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
+				            <textarea name="text" class="republishmessagetext" rows="5" maxlength="140" readonly>{{messages.TEXT}}</textarea>
 							<input type="hidden" name="reply_to"  value="0" />
 							<input type="hidden" name="republish"  value={{messages.MID}} />
 							<br><br>

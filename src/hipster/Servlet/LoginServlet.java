@@ -99,7 +99,7 @@ public class LoginServlet extends HttpServlet implements SingleThreadModel{
 				stmt.close();
 				conn.close();
 	            //PrintWriter out= response.getWriter();
-	            out.println("<a href=\"/Hipster/TestServlet\"><font color=red>Your creds aren\'t legit enough for Hipster.</font></a>");
+	            out.println("<div class="+"'response'>"+"Wrong username/password.</div>");
 	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
 	            rd.include(request, response);
 	            //response.sendRedirect("/Hipster/login.html");

@@ -1,9 +1,12 @@
 //chooses a random phrase from the array to display at the top bar on click
+
+var myVar=setInterval(function(){showrandom1()},10000);
+
 function showrandom1() {
     var quotes = ["you're special because you like sepia tones, thick rim glasses and soy milk", 
                   "does following other people make you less or more hipster?", 
                   "does it come in plaid?",
-                  "do you also drink cofffee before it's cool?  cause that's dangerous",
+                  "do you also drink coffee before it's cool?  cause that's dangerous",
                   "try a sepia filter.  everything looks better with a sepia filter",
                   "social networks?  so mainstream..",
                   "republish is so 1954. which is great.",
@@ -36,5 +39,10 @@ $(document).ready(function() {
             if (e.which !== 8) e.preventDefault();
         }
     });
- }); 
+ });
+
+//redirects upon search to appropriate topic page
+function topicred(){
+	
+};
 
